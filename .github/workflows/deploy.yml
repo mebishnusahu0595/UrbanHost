@@ -1,0 +1,28 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: 72.62.243.77
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          command_timeout: 3m
+          script: |
+            cd ~/urban-host/urbanhost
+            git fetch origin
+            git reset --hard origin/main
+            npm install
+            npm run build
+            pm2 restart urbanhost --update-env || pm2 start "npm run start" --name "urbanhost"
+            pm2 save
