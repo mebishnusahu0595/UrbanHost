@@ -5,7 +5,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useUIStore } from "@/store/useUIStore";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, ChevronDown, Building2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
@@ -18,6 +18,30 @@ export function Navbar() {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [hasApprovedProperty, setHasApprovedProperty] = useState(false);
     const pathname = usePathname();
+    const userMenuRef = useRef<HTMLDivElement>(null);
+    
+    // Close user dropdown menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+                setIsUserMenuOpen(false);
+            }
+        };
+
+        if (isUserMenuOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("touchstart", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
+    }, [isUserMenuOpen]);
+
+    // Close user menu on route change
+    useEffect(() => {
+        setIsUserMenuOpen(false);
+    }, [pathname]);
     
     // Determine if user is in property-panel context
     const isPropertyPanel = pathname?.startsWith('/property-panel');
@@ -107,10 +131,10 @@ export function Navbar() {
                     <div className="hidden md:flex items-center gap-3">
 
                         {session ? (
-                            <div className="relative">
+                            <div className="relative" ref={userMenuRef}>
                                 <button
                                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-full border border-gray-200 hover:shadow-md transition-shadow"
+                                    className="flex items-center gap-2 px-3 py-2 rounded-full border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
                                 >
                                     <div className="w-8 h-8 bg-[#1E3A8A] rounded-full flex items-center justify-center">
                                         <User className="w-4 h-4 text-white" />
@@ -118,7 +142,10 @@ export function Navbar() {
                                     <ChevronDown className="w-4 h-4 text-gray-500" />
                                 </button>
                                 {isUserMenuOpen && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 animate-in fade-in slide-in-from-top-2">
+                                    <div 
+                                        className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 animate-in fade-in slide-in-from-top-2 z-50"
+                                        onClick={() => setIsUserMenuOpen(false)}
+                                    >
                                         {session.user?.role === 'admin' ? (
                                             <Link
                                                 href="/admin/dashboard"
