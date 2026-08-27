@@ -4,7 +4,19 @@ import { useState } from "react";
 import { useTrendingHotels } from "@/lib/hooks/useHotels";
 import Link from "next/link";
 import { HotelCard } from "@/components/hotel/HotelCard";
-import { ChevronRight, Loader2, Home, Building2, Palmtree, Warehouse, Tent, Grid, CheckCircle2 } from "lucide-react";
+import {
+    ChevronRight,
+    Loader2,
+    Home,
+    Building2,
+    Palmtree,
+    Grid,
+    CheckCircle2,
+    Coffee,
+    Castle,
+    Mountain,
+    Crown,
+} from "lucide-react";
 
 export function TrendingSection() {
     const { data: trendingHotels = [], isLoading } = useTrendingHotels();
@@ -12,20 +24,46 @@ export function TrendingSection() {
 
     const categories = [
         { id: "All", label: "All Stays", icon: Grid },
-        { id: "Hotel", label: "Hotels", icon: Building2 },
-        { id: "Villa", label: "Villas", icon: Home },
-        { id: "Resort", label: "Resorts", icon: Palmtree },
-        { id: "Apartment", label: "Apartments", icon: Warehouse },
-        { id: "Homestay", label: "Homestays", icon: Tent },
+        { id: "Bed and Breakfast", label: "Bed & Breakfast", icon: Coffee },
+        { id: "Boutique Inn", label: "Boutique Inns", icon: Building2 },
+        { id: "Historic Manor", label: "Historic Manors", icon: Castle },
+        { id: "Mountain Lodge", label: "Mountain Lodges", icon: Mountain },
+        { id: "Heritage Cottage", label: "Heritage Cottages", icon: Home },
+        { id: "Luxury Villa", label: "Luxury Villas", icon: Crown },
+        { id: "Boutique Resort", label: "Boutique Resorts", icon: Palmtree },
     ];
 
     const filteredHotels = activeCategory === "All"
         ? trendingHotels
-        : trendingHotels.filter(hotel =>
-            // Flexible matching for property types
-            (hotel.category || "").toLowerCase().includes(activeCategory.toLowerCase()) ||
-            hotel.name.toLowerCase().includes(activeCategory.toLowerCase())
-        );
+        : trendingHotels.filter(hotel => {
+            const cat = (hotel.category || "").toLowerCase();
+            const name = (hotel.name || "").toLowerCase();
+            const target = activeCategory.toLowerCase();
+
+            if (target === "bed and breakfast") {
+                return cat.includes("bed") || cat.includes("breakfast") || name.includes("b&b") || name.includes("bed");
+            }
+            if (target === "boutique inn") {
+                return cat.includes("inn") || cat.includes("boutique") || name.includes("inn");
+            }
+            if (target === "historic manor") {
+                return cat.includes("manor") || cat.includes("historic") || cat.includes("house") || name.includes("manor") || name.includes("house");
+            }
+            if (target === "mountain lodge") {
+                return cat.includes("lodge") || cat.includes("mountain") || name.includes("lodge");
+            }
+            if (target === "heritage cottage") {
+                return cat.includes("cottage") || cat.includes("heritage") || name.includes("cottage");
+            }
+            if (target === "luxury villa") {
+                return cat.includes("villa") || cat.includes("luxury") || name.includes("villa");
+            }
+            if (target === "boutique resort") {
+                return cat.includes("resort") || cat.includes("gasthaus") || name.includes("resort");
+            }
+
+            return cat.includes(target) || name.includes(target);
+        });
 
     if (isLoading) {
         return (
