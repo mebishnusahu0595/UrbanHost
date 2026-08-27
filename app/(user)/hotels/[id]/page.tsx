@@ -156,6 +156,16 @@ export default function HotelDetailPage() {
     // Fetch real hotel data
     const { data: hotel, isLoading, error } = useHotel(hotelId);
 
+    // Dynamic Client Page Title & Meta (Always unconditionally at top)
+    useEffect(() => {
+        if (hotel?.name) {
+            document.title = `${hotel.name} - ${hotel.address?.city || ''}, ${hotel.address?.state || 'USA'} | StayNTour`;
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) {
+                metaDesc.setAttribute('content', `Book ${hotel.name} in ${hotel.address?.city}, ${hotel.address?.state}. Enjoy handcrafted guest suites, complimentary breakfast, and verified local hospitality.`);
+            }
+        }
+    }, [hotel]);
 
     const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -278,17 +288,6 @@ export default function HotelDetailPage() {
     const defaultRoomImage = "/bnb-images/1822-bougainvillea-house.jpg";
     const getRoomImage = (room: any) => room.images?.[0] || room.image || defaultRoomImage;
     const getRoomName = (room: any) => room.name || room.type || "Standard Room";
-
-    // Dynamic Client Page Title & Meta
-    useEffect(() => {
-        if (hotel?.name) {
-            document.title = `${hotel.name} - ${hotel.address?.city || ''}, ${hotel.address?.state || 'USA'} | StayNTour`;
-            const metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) {
-                metaDesc.setAttribute('content', `Book ${hotel.name} in ${hotel.address?.city}, ${hotel.address?.state}. Enjoy handcrafted guest suites, complimentary breakfast, and verified local hospitality.`);
-            }
-        }
-    }, [hotel]);
 
     // Capacity Validation
     const isCapacityExceeded = selectedRoom ? (rooms * (selectedRoom.capacity || 2) < adults) : false;

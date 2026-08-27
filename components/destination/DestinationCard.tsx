@@ -34,6 +34,7 @@ export function DestinationCard({ destination }: DestinationCardProps) {
                     alt={`${name}, ${state}`}
                     fill
                     sizes="(max-width: 640px) 280px, 320px"
+                    unoptimized={image.startsWith("http")}
                     className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                     onError={() => setImageError(true)}
                     priority={false}
