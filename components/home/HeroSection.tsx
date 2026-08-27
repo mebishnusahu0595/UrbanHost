@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { SearchBar } from "@/components/search/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Building2 } from "lucide-react";
@@ -9,14 +10,17 @@ export function HeroSection() {
     return (
         <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
             {/* Background Image with Overlay */}
-            <div className="absolute inset-0">
-                <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                    style={{
-                        backgroundImage: `url('/hero.png')`,
-                    }}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/hero.webp"
+                    alt="StayNTour - Authentic Stays"
+                    fill
+                    priority
+                    sizes="100vw"
+                    quality={85}
+                    className="object-cover object-center"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/35 to-black/60" />
             </div>
 
             {/* Content */}

@@ -132,7 +132,7 @@ export function TrendingSection() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6 animate-in fade-in zoom-in duration-500 w-full">
-                        {filteredHotels.map((hotel) => (
+                        {filteredHotels.map((hotel, index) => (
                             <HotelCard
                                 key={hotel._id}
                                 id={hotel._id}
@@ -143,6 +143,7 @@ export function TrendingSection() {
                                 image={hotel.images?.[0] || "/placeholder-hotel.jpg"}
                                 featured={hotel.featured}
                                 labels={hotel.labels}
+                                priority={index < 5}
                             />
                         ))}
                     </div>

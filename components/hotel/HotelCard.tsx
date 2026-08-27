@@ -15,6 +15,7 @@ interface HotelCardProps {
     image: string;
     featured?: boolean;
     labels?: string[];
+    priority?: boolean;
 }
 
 export function HotelCard({
@@ -27,6 +28,7 @@ export function HotelCard({
     image,
     featured,
     labels = [],
+    priority = false,
 }: HotelCardProps) {
 
     const [imageError, setImageError] = useState(false);
@@ -35,12 +37,14 @@ export function HotelCard({
         <Link href={`/hotels/${id}`}>
             <div className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 {/* Image Container */}
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
                     {!imageError ? (
                         <Image
                             src={image}
                             alt={name}
                             fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 25vw, 360px"
+                            priority={priority}
                             className="object-cover group-hover:scale-110 transition-transform duration-500"
                             onError={() => setImageError(true)}
                         />
