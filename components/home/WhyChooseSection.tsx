@@ -22,8 +22,8 @@ const features = [
 
 export function WhyChooseSection() {
     return (
-        <section className="py-16 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-16 bg-gray-50 w-full">
+            <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 w-full">
                 {/* Section Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">

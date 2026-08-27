@@ -78,19 +78,19 @@ export function TrendingSection() {
     }
 
     return (
-        <section className="py-16 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-16 bg-white w-full">
+            <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 w-full">
                 {/* Section Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
                     <div>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">
                             Trending Stays Nearby
                         </h2>
-                        <p className="text-gray-500">Highly-rated properties based on your location</p>
+                        <p className="text-gray-500 text-sm sm:text-base">Highly-rated properties based on your location</p>
                     </div>
                     <Link
                         href="/search?sort=trending"
-                        className="hidden sm:flex items-center gap-1 text-blue-500 hover:text-blue-600 font-medium transition-colors"
+                        className="hidden sm:flex items-center gap-1 text-blue-600 hover:text-blue-700 font-bold transition-colors"
                     >
                         View all
                         <ChevronRight className="w-4 h-4" />
@@ -98,26 +98,26 @@ export function TrendingSection() {
                 </div>
 
                 {/* Category Filters - Responsive Horizontal Scroll */}
-                <div className="flex gap-3 overflow-x-auto pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 mb-4 no-scrollbar snap-x">
+                <div className="flex gap-3 overflow-x-auto pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 mb-6 no-scrollbar snap-x">
                     {categories.map((cat) => (
                         <button
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all whitespace-nowrap snap-start ${activeCategory === cat.id
+                            className={`flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all whitespace-nowrap snap-start cursor-pointer ${activeCategory === cat.id
                                 ? "bg-[#1E3A8A] text-white border-[#1E3A8A] shadow-md transform scale-105"
                                 : "bg-white text-gray-600 border-gray-200 hover:border-blue-200 hover:bg-blue-50"
                                 }`}
                         >
                             <cat.icon className={`w-4 h-4 ${activeCategory === cat.id ? "text-white" : "text-gray-500"}`} />
                             <span className="font-bold text-sm">{cat.label}</span>
-                            {activeCategory === cat.id && <CheckCircle2 className="w-3 h-3 ml-1" />}
+                            {activeCategory === cat.id && <CheckCircle2 className="w-3.5 h-3.5 ml-1" />}
                         </button>
                     ))}
                 </div>
 
                 {/* Hotel Cards Grid */}
                 {filteredHotels.length === 0 ? (
-                    <div className="text-center py-20 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
+                    <div className="text-center py-20 bg-gray-50 rounded-3xl border border-dashed border-gray-200 w-full">
                         <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                             <Home className="w-8 h-8 text-gray-400" />
                         </div>
@@ -131,7 +131,7 @@ export function TrendingSection() {
                         </button>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in zoom-in duration-500">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6 animate-in fade-in zoom-in duration-500 w-full">
                         {filteredHotels.map((hotel) => (
                             <HotelCard
                                 key={hotel._id}
