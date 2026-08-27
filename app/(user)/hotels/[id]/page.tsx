@@ -479,13 +479,13 @@ export default function HotelDetailPage() {
 
                         {/* Location Map */}
                         {(() => {
-                            const lat = hotel.location?.coordinates?.[1] || (hotel as any).latitude;
-                            const lng = hotel.location?.coordinates?.[0] || (hotel as any).longitude;
-                            const locationStr = [hotel.address?.street, hotel.address?.city, hotel.address?.state, "USA"].filter(Boolean).join(", ");
-                            const mapQuery = lat && lng
-                                ? `${lat},${lng}`
-                                : encodeURIComponent(`${hotel.name}, ${locationStr}`);
-                            const mapEmbedUrl = hotel.embedUrl || `https://maps.google.com/maps?q=${mapQuery}&hl=en&z=14&output=embed`;
+                            const street = hotel.address?.street || "";
+                            const city = hotel.address?.city || "";
+                            const state = hotel.address?.state || "";
+                            // Address query guarantees Google Maps places the pin on actual land/street
+                            const addressQuery = [street, city, state, "USA"].filter(Boolean).join(", ");
+                            const mapQuery = encodeURIComponent(addressQuery || `${hotel.name}, USA`);
+                            const mapEmbedUrl = hotel.embedUrl || `https://maps.google.com/maps?q=${mapQuery}&hl=en&z=15&output=embed`;
 
                             return (
                                 <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-[400px] relative z-0 flex items-center justify-center bg-gray-50">
@@ -502,7 +502,7 @@ export default function HotelDetailPage() {
                                     />
                                     <div className="absolute top-4 left-4 z-[400] bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-gray-900 shadow-md border border-gray-200 pointer-events-none flex items-center gap-1.5">
                                         <MapPin className="w-3.5 h-3.5 text-rose-500" />
-                                        <span>{[hotel.address?.city, hotel.address?.state].filter(Boolean).join(", ") || "USA"}</span>
+                                        <span>{[city, state].filter(Boolean).join(", ") || "USA"}</span>
                                     </div>
                                 </section>
                             );
