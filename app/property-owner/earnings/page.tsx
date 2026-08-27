@@ -98,9 +98,9 @@ export default function EarningsPage() {
     }, [session, timeFilter]);
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'INR',
+            currency: 'USD',
             maximumFractionDigits: 0,
         }).format(amount);
     };
@@ -114,7 +114,7 @@ export default function EarningsPage() {
     const handleDownloadReport = () => {
         if (!earnings?.monthlyBreakdown) return;
 
-        const headers = ["Label/Date", "Earnings (INR)", "Bookings"];
+        const headers = ["Label/Date", "Earnings (USD)", "Bookings"];
         const rows = earnings.monthlyBreakdown.map(item => [
             item.month,
             item.earnings.toString(),
@@ -215,7 +215,7 @@ export default function EarningsPage() {
                 borderWidth: 1,
                 cornerRadius: 8,
                 callbacks: {
-                    label: (context: any) => `₹${context.parsed.y?.toLocaleString() || context.parsed?.toLocaleString()}`,
+                    label: (context: any) => `$${context.parsed.y?.toLocaleString() || context.parsed?.toLocaleString()}`,
                 },
             },
         },
@@ -236,7 +236,7 @@ export default function EarningsPage() {
                 ticks: {
                     color: '#888888',
                     font: { size: 11 },
-                    callback: (value: any) => value >= 1000 ? `₹${value / 1000}k` : `₹${value}`,
+                    callback: (value: any) => value >= 1000 ? `$${value / 1000}k` : `$${value}`,
                 },
             },
         },
@@ -284,7 +284,7 @@ export default function EarningsPage() {
                 bodyColor: '#fff',
                 padding: 12,
                 callbacks: {
-                    label: (context: any) => `₹${context.parsed?.toLocaleString()}`,
+                    label: (context: any) => `$${context.parsed?.toLocaleString()}`,
                 },
             },
         },
@@ -340,7 +340,7 @@ export default function EarningsPage() {
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
                         <div className="text-2xl md:text-3xl font-bold text-blue-900">
-                            {earnings ? formatCurrency(earnings.totalEarnings) : '₹0'}
+                            {earnings ? formatCurrency(earnings.totalEarnings) : '$0'}
                         </div>
                         <p className="text-xs text-blue-600 mt-1">All time</p>
                     </CardContent>
@@ -352,7 +352,7 @@ export default function EarningsPage() {
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
                         <div className="text-2xl md:text-3xl font-bold text-green-900">
-                            {earnings ? formatCurrency(earnings.thisMonthEarnings) : '₹0'}
+                            {earnings ? formatCurrency(earnings.thisMonthEarnings) : '$0'}
                         </div>
                         <p className={`text-xs mt-1 flex items-center ${isPositiveGrowth ? 'text-green-600' : 'text-red-600'}`}>
                             {isPositiveGrowth ? <MdTrendingUp className="h-3 w-3 mr-1" /> : <MdTrendingDown className="h-3 w-3 mr-1" />}
@@ -367,7 +367,7 @@ export default function EarningsPage() {
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
                         <div className="text-2xl md:text-3xl font-bold text-purple-900">
-                            {earnings ? formatCurrency(earnings.lastMonthEarnings) : '₹0'}
+                            {earnings ? formatCurrency(earnings.lastMonthEarnings) : '$0'}
                         </div>
                         <p className="text-xs text-purple-600 mt-1">Previous month</p>
                     </CardContent>
@@ -379,7 +379,7 @@ export default function EarningsPage() {
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
                         <div className="text-2xl md:text-3xl font-bold text-amber-900">
-                            {earnings ? formatCurrency(earnings.pendingPayouts) : '₹0'}
+                            {earnings ? formatCurrency(earnings.pendingPayouts) : '$0'}
                         </div>
                         <p className="text-xs text-amber-600 mt-1">To be paid</p>
                     </CardContent>
@@ -521,7 +521,7 @@ export default function EarningsPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className="text-4xl font-bold text-green-800">
-                                    {earnings ? formatCurrency(earnings.completedPayouts) : '₹0'}
+                                    {earnings ? formatCurrency(earnings.completedPayouts) : '$0'}
                                 </div>
                                 <p className="text-sm text-green-600 mt-2">Successfully transferred to your account</p>
                             </CardContent>
@@ -533,7 +533,7 @@ export default function EarningsPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className="text-4xl font-bold text-amber-800">
-                                    {earnings ? formatCurrency(earnings.pendingPayouts) : '₹0'}
+                                    {earnings ? formatCurrency(earnings.pendingPayouts) : '$0'}
                                 </div>
                                 <p className="text-sm text-amber-600 mt-2">Will be processed in next payout cycle</p>
                             </CardContent>

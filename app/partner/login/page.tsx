@@ -91,7 +91,7 @@ function PartnerLoginForm() {
                     <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
                     <div className="relative z-10">
-                        <h1 className="text-4xl font-bold mb-6">Grow your business with Urban Host</h1>
+                        <h1 className="text-4xl font-bold mb-6">Grow your business with StayNTour</h1>
                         <p className="text-lg text-blue-100 max-w-md">
                             Join thousands of property owners who trust us to manage their listings and increase bookings.
                         </p>
@@ -119,7 +119,7 @@ function PartnerLoginForm() {
                     </div>
 
                     <div className="relative z-10 text-sm text-blue-300">
-                        © {new Date().getFullYear()} Urban Host Inc.
+                        © {new Date().getFullYear()} StayNTour Inc.
                     </div>
                 </div>
 

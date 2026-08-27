@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { MdCalendarToday, MdDownload, MdAttachMoney, MdEventNote, MdPeople, MdHotel, MdTrendingUp, MdTrendingDown, MdNotifications } from "react-icons/md";
+import { MdCalendarToday, MdDownload, MdAttachMoney, MdEventNote, MdPeople, MdHotel, MdTrendingUp, MdTrendingDown, MdNotifications, MdLocationOn, MdPublic } from "react-icons/md";
 import { RevenueChart } from '@/app/admin/dashboard/revenue-chart';
 import { OccupancyChart } from '@/app/admin/dashboard/occupancy-chart';
 import Link from "next/link";
@@ -71,6 +71,8 @@ export default function DashboardPage() {
     const [monthlyRevenue, setMonthlyRevenue] = useState<any[]>([]);
     const [weeklyRevenue, setWeeklyRevenue] = useState<any[]>([]);
     const [dailyRevenue, setDailyRevenue] = useState<any[]>([]);
+    const [topCustomerCities, setTopCustomerCities] = useState<any[]>([]);
+    const [topCustomerStates, setTopCustomerStates] = useState<any[]>([]);
     const [revenuePeriod, setRevenuePeriod] = useState<'monthly' | 'weekly' | 'daily'>('daily');
     const [timeRange, setTimeRange] = useState('30d');
     const [loading, setLoading] = useState(true);
@@ -101,6 +103,8 @@ export default function DashboardPage() {
                     setMonthlyRevenue(data.monthlyRevenue || []);
                     setWeeklyRevenue(data.weeklyRevenue || []);
                     setDailyRevenue(data.dailyRevenue || []);
+                    setTopCustomerCities(data.topCustomerCities || []);
+                    setTopCustomerStates(data.topCustomerStates || []);
                 }
             } catch (error) {
                 console.error("Failed to fetch stats:", error);
@@ -143,15 +147,15 @@ export default function DashboardPage() {
     }
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'INR',
+            currency: 'USD',
             maximumFractionDigits: 0,
         }).format(amount);
     };
 
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-IN', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
@@ -297,7 +301,7 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent className="p-3 md:p-5 pt-0 md:pt-0">
                         <div className="text-lg md:text-2xl font-bold text-gray-900">
-                            {stats ? formatCurrency(stats.totalRevenue) : '₹0'}
+                            {stats ? formatCurrency(stats.totalRevenue) : '$0'}
                         </div>
                         <GrowthIndicator value={stats?.revenueGrowth || 0} label={getGrowthLabel()} />
                     </CardContent>
@@ -384,6 +388,121 @@ export default function DashboardPage() {
                             pendingHotels={stats?.pendingHotels || 0}
                             totalHotels={stats?.totalHotels || 0}
                         />
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Customer Geographical Distribution */}
+            <div className="grid gap-4 md:gap-6 lg:grid-cols-2">
+                {/* Top Customer Cities */}
+                <Card className="bg-white shadow-sm border-0">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4 flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle className="text-sm md:text-base font-bold text-gray-900 flex items-center gap-2">
+                                <MdLocationOn className="w-5 h-5 text-rose-500" />
+                                Top Customer Cities
+                            </CardTitle>
+                            <CardDescription className="text-xs md:text-sm mt-0.5 text-gray-500">
+                                Cities with highest customer concentration
+                            </CardDescription>
+                        </div>
+                        <Link href="/admin/users">
+                            <Button variant="ghost" size="sm" className="text-xs text-blue-600 font-bold hover:text-blue-700 p-0">
+                                View Users →
+                            </Button>
+                        </Link>
+                    </CardHeader>
+                    <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
+                        {topCustomerCities.length === 0 ? (
+                            <div className="text-center py-8 text-gray-400 text-xs">
+                                <MdLocationOn className="w-8 h-8 mx-auto mb-2 opacity-40 text-gray-400" />
+                                <p>Capturing customer city locations...</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-3.5">
+                                {topCustomerCities.map((item, idx) => {
+                                    const maxCount = Math.max(...topCustomerCities.map((c: any) => c.count), 1);
+                                    const pct = Math.round((item.count / maxCount) * 100);
+                                    return (
+                                        <div key={idx} className="space-y-1.5">
+                                            <div className="flex items-center justify-between text-xs font-bold">
+                                                <span className="text-gray-800 flex items-center gap-1.5">
+                                                    <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-600 text-[10px] flex items-center justify-center font-black">
+                                                        {idx + 1}
+                                                    </span>
+                                                    {item.city} {item.state ? `(${item.state})` : ""}
+                                                </span>
+                                                <span className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
+                                                    {item.count} Customer{item.count !== 1 ? "s" : ""}
+                                                </span>
+                                            </div>
+                                            <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                                                <div
+                                                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-500"
+                                                    style={{ width: `${Math.max(pct, 10)}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* Top Customer States */}
+                <Card className="bg-white shadow-sm border-0">
+                    <CardHeader className="p-4 md:p-6 pb-2 md:pb-4 flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle className="text-sm md:text-base font-bold text-gray-900 flex items-center gap-2">
+                                <MdPublic className="w-5 h-5 text-indigo-500" />
+                                Customer Distribution by State
+                            </CardTitle>
+                            <CardDescription className="text-xs md:text-sm mt-0.5 text-gray-500">
+                                Statewide customer and admin demographic breakdown
+                            </CardDescription>
+                        </div>
+                        <Link href="/admin/users">
+                            <Button variant="ghost" size="sm" className="text-xs text-blue-600 font-bold hover:text-blue-700 p-0">
+                                View All →
+                            </Button>
+                        </Link>
+                    </CardHeader>
+                    <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
+                        {topCustomerStates.length === 0 ? (
+                            <div className="text-center py-8 text-gray-400 text-xs">
+                                <MdPublic className="w-8 h-8 mx-auto mb-2 opacity-40 text-gray-400" />
+                                <p>Capturing customer state locations...</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-3.5">
+                                {topCustomerStates.map((item, idx) => {
+                                    const maxCount = Math.max(...topCustomerStates.map((s: any) => s.count), 1);
+                                    const pct = Math.round((item.count / maxCount) * 100);
+                                    return (
+                                        <div key={idx} className="space-y-1.5">
+                                            <div className="flex items-center justify-between text-xs font-bold">
+                                                <span className="text-gray-800 flex items-center gap-1.5">
+                                                    <span className="w-5 h-5 rounded-full bg-indigo-50 text-indigo-600 text-[10px] flex items-center justify-center font-black">
+                                                        {idx + 1}
+                                                    </span>
+                                                    {item.state}
+                                                </span>
+                                                <span className="text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">
+                                                    {item.count} Customer{item.count !== 1 ? "s" : ""}
+                                                </span>
+                                            </div>
+                                            <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                                                <div
+                                                    className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-500"
+                                                    style={{ width: `${Math.max(pct, 10)}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
             </div>

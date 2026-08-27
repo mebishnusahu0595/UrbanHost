@@ -247,6 +247,58 @@ export async function GET(req: NextRequest) {
       { $sort: { '_id.year': 1, '_id.month': 1, '_id.day': 1 } }
     ]);
 
+    // Top Customer Cities
+    const topCustomerCities = await User.aggregate([
+      {
+        $match: {
+          lastCity: { $exists: true, $ne: "" },
+          email: { $nin: ["superadmin@stayntour.com", "superadmin@urbanhost.com"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$lastCity",
+          count: { $sum: 1 },
+          state: { $first: "$lastState" },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 8 },
+      {
+        $project: {
+          city: "$_id",
+          state: "$state",
+          count: 1,
+          _id: 0,
+        },
+      },
+    ]);
+
+    // Top Customer States
+    const topCustomerStates = await User.aggregate([
+      {
+        $match: {
+          lastState: { $exists: true, $ne: "" },
+          email: { $nin: ["superadmin@stayntour.com", "superadmin@urbanhost.com"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$lastState",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 8 },
+      {
+        $project: {
+          state: "$_id",
+          count: 1,
+          _id: 0,
+        },
+      },
+    ]);
+
     return NextResponse.json({
       stats: {
         totalHotels: statsHotels,
@@ -268,6 +320,8 @@ export async function GET(req: NextRequest) {
       monthlyRevenue,
       weeklyRevenue,
       dailyRevenue,
+      topCustomerCities,
+      topCustomerStates,
     }, { status: 200 });
   } catch (error: any) {
     console.error('Dashboard stats error:', error);

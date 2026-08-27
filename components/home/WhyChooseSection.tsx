@@ -27,7 +27,7 @@ export function WhyChooseSection() {
                 {/* Section Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-                        Why Choose Urban Host
+                        Why Choose StayNTour
                     </h2>
                     <p className="text-gray-500 max-w-2xl mx-auto">
                         We make travel simple, secure, and memorable.

@@ -287,7 +287,7 @@ export default function StaffManagementPage() {
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="staff@urbanhost.in"
+                                placeholder="staff@stayntour.com"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 required

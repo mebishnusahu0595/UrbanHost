@@ -188,7 +188,7 @@ export default function ConfirmationPage() {
                                 <Search className="w-5 h-5 text-[#1E3A8A] rotate-90" />
                             </div>
                             <p className="text-sm leading-relaxed">
-                                A refund of <span className="font-bold">₹{booking.totalPrice.toLocaleString("en-IN")}</span> has been initiated to your original payment method ({formatPaymentMethod(booking.paymentMethod)}) and will reflect in <span className="font-bold">5-7 business days</span>.
+                                A refund of <span className="font-bold">${booking.totalPrice.toLocaleString("en-US")}</span> has been initiated to your original payment method ({formatPaymentMethod(booking.paymentMethod)}) and will reflect in <span className="font-bold">5-7 business days</span>.
                             </p>
                         </div>
 
@@ -250,7 +250,7 @@ export default function ConfirmationPage() {
                                             {h.location}
                                         </div>
                                         <div className="flex items-end gap-1">
-                                            <span className="text-lg font-bold text-[#F87171]">₹{h.price}</span>
+                                            <span className="text-lg font-bold text-[#F87171]">${h.price}</span>
                                             <span className="text-sm text-gray-400 mb-0.5">/ night</span>
                                         </div>
                                     </div>
@@ -428,17 +428,17 @@ export default function ConfirmationPage() {
                             <div className="space-y-4 mb-6">
                                 <div className="flex justify-between text-gray-600 text-sm">
                                     <span>{booking.roomType} x {nights} Nights</span>
-                                    <span className="font-medium text-gray-900">₹{basePrice.toFixed(2)}</span>
+                                    <span className="font-medium text-gray-900">${basePrice.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-600 text-sm">
                                     <span>Total Price (Incl. Taxes & Fees)</span>
-                                    <span className="font-medium text-gray-900">₹{booking.totalPrice.toFixed(2)}</span>
+                                    <span className="font-medium text-gray-900">${booking.totalPrice.toFixed(2)}</span>
                                 </div>
                             </div>
 
                             <div className="flex justify-between items-center pt-4 border-t border-gray-100 mb-6">
                                 <span className="font-bold text-gray-900">Total Paid</span>
-                                <span className="text-2xl font-bold text-[#F87171]">₹{booking.totalPrice.toLocaleString("en-IN")}</span>
+                                <span className="text-2xl font-bold text-[#F87171]">${booking.totalPrice.toLocaleString("en-US")}</span>
                             </div>
 
                             <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3 print:bg-transparent print:border">

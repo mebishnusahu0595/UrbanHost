@@ -92,22 +92,15 @@ export default function ForgotPasswordPage() {
             <div className="max-w-md w-full">
                 {/* Logo & Header */}
                 <div className="text-center mb-8">
-                    <Link href="/" className="inline-flex items-center mb-6">
-                        <Image
-                            src="/list_property.png"
-                            alt="Urban Host Icon"
-                            width={50}
-                            height={50}
-                            className="h-12 w-auto"
-                            quality={100}
-                        />
+                    <Link href="/" className="inline-flex items-center justify-center mb-6">
                         <Image
                             src="/logo_name.png"
-                            alt="Urban Host"
-                            width={200}
-                            height={50}
-                            className="h-20 w-auto -ml-3"
+                            alt="StayNTour"
+                            width={190}
+                            height={54}
+                            className="h-11 w-auto object-contain"
                             quality={100}
+                            unoptimized
                         />
                     </Link>
                     <h1 className="text-3xl font-black text-gray-900 tracking-tight">
@@ -245,7 +238,7 @@ export default function ForgotPasswordPage() {
                 <div className="mt-8 text-center">
                     <p className="text-sm text-gray-400 font-medium whitespace-pre-wrap">
                         Need assistance? Contact us at<br />
-                        <span className="text-gray-600 font-bold">kuberhoteliers@gmail.com</span>
+                        <span className="text-gray-600 font-bold">support@stayntour.com</span>
                     </p>
                 </div>
             </div>

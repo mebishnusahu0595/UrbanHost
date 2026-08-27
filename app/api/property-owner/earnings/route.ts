@@ -205,10 +205,10 @@ export async function GET(req: NextRequest) {
         label = `${hour.toString().padStart(2, '0')}:00`;
       } else if (labelFormat === 'day') {
         const date = new Date(item._id.year, item._id.month - 1, item._id.day);
-        label = date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+        label = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
       } else {
         const date = new Date(item._id.year, item._id.month - 1);
-        label = date.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+        label = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
       }
 
       return {

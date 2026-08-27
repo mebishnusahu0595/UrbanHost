@@ -104,7 +104,7 @@ export function GoogleMapsImportModal({
                     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, {
                         headers: {
                             'Accept-Language': 'en',
-                            'User-Agent': 'UrbanHost-Property-Importer'
+                            'User-Agent': 'StayNTour-Property-Importer'
                         }
                     });
 

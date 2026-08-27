@@ -166,12 +166,12 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            {/* LIFE AT URBAN HOST */}
+            {/* LIFE AT STAYNTOUR */}
             <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <Card className="bg-[#EBF3FF] border-none rounded-[3rem] overflow-hidden p-8 md:p-16">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div className="space-y-8">
-                            <h2 className="text-3xl md:text-5xl font-black text-gray-900">Life at Urban Host</h2>
+                            <h2 className="text-3xl md:text-5xl font-black text-gray-900">Life at StayNTour</h2>
                             <p className="text-lg text-gray-600 leading-relaxed font-medium">
                                 We're a group of travelers, technologists, and dreamers. Beyond the code and the metrics, we're building a community that values curiosity and kindness.
                             </p>

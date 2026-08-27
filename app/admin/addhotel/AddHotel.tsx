@@ -176,7 +176,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
     city: "",
     state: "",
     zipCode: "",
-    country: "India",
+    country: "United States",
     coordinates: { lat: 0, lng: 0 },
     embedUrl: "",
 
@@ -207,7 +207,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
       cancellation: "",
     },
 
-    // Step 7: Documents - Comprehensive as per URBANHOST Requirements
+    // Step 7: Documents - Comprehensive as per STAYNTOUR Requirements
     documents: {
       // KYC Documents
       panCard: null as File | string | null,
@@ -256,7 +256,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
               city: hotel.address?.city || "",
               state: hotel.address?.state || "",
               zipCode: hotel.address?.zipCode || "",
-              country: hotel.address?.country || "India",
+              country: hotel.address?.country || "United States",
               coordinates: hotel.coordinates || { lat: 0, lng: 0 },
               embedUrl: hotel.embedUrl || "",
               phone: hotel.contactInfo?.phone || "",
@@ -291,9 +291,9 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
   }, [hotelId]);
 
   const [customTagInput, setCustomTagInput] = useState("");
-  // Hide "Urban Host Property" tag for property owners (non-admin)
+  // Hide "StayNTour Property" tag for property owners (non-admin)
   const availableTags = isAdmin
-    ? ["Featured", "Urban Host Property", "Premium", "Budget Friendly"]
+    ? ["Featured", "StayNTour Property", "Premium", "Budget Friendly"]
     : ["Featured", "Premium", "Budget Friendly"];
 
   const toggleTag = (tag: string) => {
@@ -511,7 +511,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
           city: formData.city,
           state: formData.state || "",
           zipCode: formData.zipCode || "000000",
-          country: formData.country || "India"
+          country: formData.country || "United States"
         },
         embedUrl: formData.embedUrl || "",
         coordinates: (formData.coordinates.lat !== 0 || formData.coordinates.lng !== 0) ? formData.coordinates : undefined,
@@ -603,7 +603,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
                   city: property.address?.city || "",
                   state: property.address?.state || "",
                   zipCode: property.address?.zipCode || "",
-                  country: property.address?.country || "India",
+                  country: property.address?.country || "United States",
                   coordinates: property.coordinates || { lat: 0, lng: 0 },
                   embedUrl: property.embedUrl || "",
                   phone: property.contactInfo?.phone || "",
@@ -722,7 +722,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
                   Property Name *
                 </label>
                 <Input
-                  placeholder="e.g., Grand Hotel Mumbai"
+                  placeholder="e.g., Grand Hotel New York"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
@@ -764,7 +764,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price (₹) *
+                  Price ($) *
                 </label>
                 <Input
                   type="number"
@@ -946,7 +946,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
                     City *
                   </label>
                   <Input
-                    placeholder="Mumbai"
+                    placeholder="New York"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     required
@@ -958,7 +958,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
                     State *
                   </label>
                   <Input
-                    placeholder="Maharashtra"
+                    placeholder="New York"
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                     required
@@ -972,7 +972,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
                     ZIP Code *
                   </label>
                   <Input
-                    placeholder="400001"
+                    placeholder="10001"
                     value={formData.zipCode}
                     onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
                     required
@@ -984,7 +984,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
                     Country *
                   </label>
                   <Input
-                    placeholder="India"
+                    placeholder="United States"
                     value={formData.country}
                     onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                     required
@@ -1272,10 +1272,10 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
 
                 <div className="mt-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mobile Deal Text (e.g. Special discount of ₹22)
+                    Mobile Deal Text (e.g. Special discount of $22)
                   </label>
                   <Input
-                    placeholder="Special discount of ₹22 for Mobile users"
+                    placeholder="Special discount of $22 for Mobile users"
                     value={formData.highlights.mobileDeal}
                     onChange={(e) => setFormData({
                       ...formData,
@@ -1333,7 +1333,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Price per Night (₹) *
+                            Price per Night ($) *
                           </label>
                           <Input
                             type="number"
@@ -1502,7 +1502,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
 
                 {/* Signed Agreement */}
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">6. Signed URBANHOST Agreement * (PDF only)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">6. Signed STAYNTOUR Agreement * (PDF only)</label>
                   <input type="file" accept=".pdf" onChange={(e) => e.target.files && handleDocumentUpload('signedAgreement', e.target.files[0])}
                     className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#1E3A8A] file:text-white hover:file:bg-[#1e40af]"
                   />
@@ -1663,7 +1663,7 @@ export default function ListPropertyPage({ isAdmin = false, hotelId }: { isAdmin
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Price (₹)</label>
+                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Price ($)</label>
                         <Input
                           type="number"
                           placeholder="500"

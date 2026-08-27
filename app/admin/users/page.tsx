@@ -8,7 +8,37 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MdPeople, MdSearch, MdFilterList, MdEdit, MdDelete } from "react-icons/md";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog";
+import {
+    MdSearch,
+    MdEdit,
+    MdDelete,
+    MdLocationOn,
+    MdHistory,
+    MdMap,
+    MdLanguage,
+    MdDevices,
+    MdRefresh,
+} from "react-icons/md";
+import { MapPin, ExternalLink, Globe, Shield, User as UserIcon, ChevronLeft, ChevronRight } from "lucide-react";
+
+interface LocationHistoryItem {
+    ip?: string;
+    lat?: number;
+    lng?: number;
+    address?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    trackedAt: string;
+    userAgent?: string;
+}
 
 interface User {
     _id: string;
@@ -17,6 +47,16 @@ interface User {
     phone?: string;
     role: string;
     createdAt: string;
+    lastLoginIp?: string;
+    lastLocationCoordinates?: {
+        lat: number;
+        lng: number;
+    };
+    lastLocationAddress?: string;
+    lastCity?: string;
+    lastState?: string;
+    lastCountry?: string;
+    locationHistory?: LocationHistoryItem[];
 }
 
 export default function UsersPage() {
@@ -26,6 +66,14 @@ export default function UsersPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [filterRole, setFilterRole] = useState<string>("all");
+    const [filterState, setFilterState] = useState<string>("all");
+    const [filterCity, setFilterCity] = useState<string>("all");
+    const [availableStates, setAvailableStates] = useState<string[]>([]);
+    const [availableCities, setAvailableCities] = useState<string[]>([]);
+
+    // History Modal State
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -35,21 +83,24 @@ export default function UsersPage() {
         }
     }, [status, session, router]);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch("/api/admin/users");
-                if (response.ok) {
-                    const data = await response.json();
-                    setUsers(data.users);
-                }
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            } finally {
-                setLoading(false);
+    const fetchUsers = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("/api/admin/users");
+            if (response.ok) {
+                const data = await response.json();
+                setUsers(data.users || []);
+                setAvailableStates(data.filters?.states || []);
+                setAvailableCities(data.filters?.cities || []);
             }
-        };
+        } catch (error) {
+            console.error("Failed to fetch users:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         if (session?.user) {
             fetchUsers();
         }
@@ -76,11 +127,14 @@ export default function UsersPage() {
     };
 
     const handleEditRole = async (user: User) => {
-        const newRole = prompt(`Update role for ${user.name} (user, propertyOwner, receptionist, admin):`, user.role);
+        const newRole = prompt(
+            `Update role for ${user.name} (user, admin, propertyOwner, receptionist):`,
+            user.role
+        );
         if (!newRole || newRole === user.role) return;
 
         if (!["user", "propertyOwner", "receptionist", "admin"].includes(newRole)) {
-            alert("Invalid role. Please use: user, propertyOwner, receptionist, or admin");
+            alert("Invalid role. Please use: user, admin, propertyOwner, or receptionist");
             return;
         }
 
@@ -92,7 +146,7 @@ export default function UsersPage() {
             });
 
             if (response.ok) {
-                setUsers(users.map(u => u._id === user._id ? { ...u, role: newRole } : u));
+                setUsers(users.map((u) => (u._id === user._id ? { ...u, role: newRole } : u)));
             } else {
                 const data = await response.json();
                 alert(data.error || "Failed to update role");
@@ -103,244 +157,498 @@ export default function UsersPage() {
         }
     };
 
-    const filteredUsers = users.filter(user => {
-        const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 25;
+
+    // Reset pagination on filter change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, filterRole, filterState, filterCity]);
+
+    const filteredUsers = users.filter((user) => {
+        const query = searchTerm.toLowerCase();
+        const matchesSearch =
+            user.name.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query) ||
+            (user.lastLoginIp && user.lastLoginIp.toLowerCase().includes(query)) ||
+            (user.lastCity && user.lastCity.toLowerCase().includes(query)) ||
+            (user.lastState && user.lastState.toLowerCase().includes(query));
+
         const matchesRole = filterRole === "all" || user.role === filterRole;
-        return matchesSearch && matchesRole;
+        const matchesState = filterState === "all" || user.lastState === filterState;
+        const matchesCity = filterCity === "all" || user.lastCity === filterCity;
+
+        return matchesSearch && matchesRole && matchesState && matchesCity;
     });
+
+    const totalPages = Math.max(1, Math.ceil(filteredUsers.length / itemsPerPage));
+    const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const getRoleBadge = (role: string) => {
         const colors: Record<string, string> = {
-            admin: "bg-red-100 text-red-800",
-            propertyOwner: "bg-blue-100 text-blue-800",
-            receptionist: "bg-purple-100 text-purple-800",
-            user: "bg-green-100 text-green-800",
+            admin: "bg-purple-100 text-purple-800 border-purple-200",
+            propertyOwner: "bg-blue-100 text-blue-800 border-blue-200",
+            receptionist: "bg-amber-100 text-amber-800 border-amber-200",
+            user: "bg-emerald-100 text-emerald-800 border-emerald-200",
         };
-        return colors[role] || "bg-gray-100 text-gray-800";
+        return colors[role] || "bg-gray-100 text-gray-800 border-gray-200";
     };
 
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-                    <p>Loading users...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-medium">Loading customer and admin records...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col gap-4 md:gap-6 p-4 md:p-6">
-            {/* Header */}
-            <div>
-                <h1 className="text-xl md:text-4xl font-bold">User Management</h1>
-                <p className="text-xs md:text-lg text-muted-foreground mt-1">
-                    Manage all users and property owners
-                </p>
+        <div className="flex flex-col gap-6 p-4 md:p-6 w-full">
+            {/* Header with Refresh */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                        Customer & Admin Location Analysis
+                    </h1>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Track customer registrations, live IP addresses, GPS coordinates & geographical locations.
+                    </p>
+                </div>
+                <Button
+                    onClick={fetchUsers}
+                    variant="outline"
+                    className="flex items-center gap-2 rounded-xl h-11 border-gray-300 font-bold"
+                >
+                    <MdRefresh className="w-5 h-5 text-gray-600" />
+                    Refresh Data
+                </Button>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
-                <Card>
-                    <CardContent className="p-3 md:p-6">
-                        <p className="text-[10px] md:text-sm text-muted-foreground">Users</p>
-                        <div className="text-lg md:text-3xl font-bold">
-                            {users.filter(u => u.role === "user").length}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5">
+                <Card className="rounded-2xl border-gray-100 shadow-sm bg-white">
+                    <CardContent className="p-4 md:p-6">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Customers / Users</span>
+                            <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <UserIcon className="w-4 h-4" />
+                            </div>
+                        </div>
+                        <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2">
+                            {users.filter((u) => u.role === "user").length}
                         </div>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardContent className="p-3 md:p-6">
-                        <p className="text-[10px] md:text-sm text-muted-foreground">Owners</p>
-                        <div className="text-lg md:text-3xl font-bold">
-                            {users.filter(u => u.role === "propertyOwner").length}
+
+                <Card className="rounded-2xl border-gray-100 shadow-sm bg-white">
+                    <CardContent className="p-4 md:p-6">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Admins</span>
+                            <div className="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center">
+                                <Shield className="w-4 h-4" />
+                            </div>
+                        </div>
+                        <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2">
+                            {users.filter((u) => u.role === "admin").length}
                         </div>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardContent className="p-3 md:p-6">
-                        <p className="text-[10px] md:text-sm text-muted-foreground">Receptionists</p>
-                        <div className="text-lg md:text-3xl font-bold">
-                            {users.filter(u => u.role === "receptionist").length}
+
+                <Card className="rounded-2xl border-gray-100 shadow-sm bg-white">
+                    <CardContent className="p-4 md:p-6">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Property Owners</span>
+                            <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                                <Globe className="w-4 h-4" />
+                            </div>
+                        </div>
+                        <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2">
+                            {users.filter((u) => u.role === "propertyOwner").length}
                         </div>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardContent className="p-3 md:p-6">
-                        <p className="text-[10px] md:text-sm text-muted-foreground">Admins</p>
-                        <div className="text-lg md:text-3xl font-bold">
-                            {users.filter(u => u.role === "admin").length}
+
+                <Card className="rounded-2xl border-gray-100 shadow-sm bg-white">
+                    <CardContent className="p-4 md:p-6">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Tracked Locations</span>
+                            <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <MapPin className="w-4 h-4" />
+                            </div>
+                        </div>
+                        <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2">
+                            {users.filter((u) => u.lastCity || u.lastLoginIp).length}
                         </div>
                     </CardContent>
                 </Card>
             </div>
 
-            {/* Users List */}
-            <Card>
-                <CardHeader className="p-4 md:p-6">
-                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <CardTitle className="text-base md:text-xl font-bold">All Users</CardTitle>
-                            <CardDescription className="text-xs md:text-base mt-1">
-                                {filteredUsers.length} users found
-                            </CardDescription>
+            {/* Users List with Location & IP Tracking */}
+            <Card className="rounded-3xl border-gray-100 shadow-sm overflow-hidden bg-white">
+                <CardHeader className="p-5 md:p-6 border-b border-gray-100 bg-gray-50/50">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <CardTitle className="text-lg md:text-xl font-bold text-gray-900">
+                                    Tracked Accounts ({filteredUsers.length})
+                                </CardTitle>
+                                <CardDescription className="text-xs text-gray-500">
+                                    Displaying customers and admins with verified location coordinates & IP logs
+                                </CardDescription>
+                            </div>
                         </div>
-                        <div className="flex flex-col gap-2 md:flex-row md:gap-3">
+
+                        {/* Search & Multi-Filters Bar */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             <div className="relative">
-                                <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
+                                <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                                 <Input
-                                    placeholder="Search users..."
-                                    className="pl-9 md:pl-10 w-full md:w-64 text-sm md:text-base h-9 md:h-10"
+                                    placeholder="Search by name, email, IP, city..."
+                                    className="pl-10 w-full h-11 rounded-xl bg-white border-gray-200 text-sm font-medium"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </div>
+
                             <Select value={filterRole} onValueChange={setFilterRole}>
-                                <SelectTrigger className="w-full md:w-[160px] h-9 md:h-10 text-sm md:text-base">
+                                <SelectTrigger className="w-full h-11 rounded-xl bg-white border-gray-200 text-sm font-medium">
                                     <SelectValue placeholder="All Roles" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">All Roles</SelectItem>
-                                    <SelectItem value="user">Users</SelectItem>
+                                    <SelectItem value="user">Customers / Users</SelectItem>
+                                    <SelectItem value="admin">Admins</SelectItem>
                                     <SelectItem value="propertyOwner">Property Owners</SelectItem>
                                     <SelectItem value="receptionist">Receptionists</SelectItem>
-                                    <SelectItem value="admin">Admins</SelectItem>
+                                </SelectContent>
+                            </Select>
+
+                            <Select value={filterState} onValueChange={setFilterState}>
+                                <SelectTrigger className="w-full h-11 rounded-xl bg-white border-gray-200 text-sm font-medium">
+                                    <SelectValue placeholder="Filter by State" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All States</SelectItem>
+                                    {availableStates.map((st) => (
+                                        <SelectItem key={st} value={st}>
+                                            {st}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <Select value={filterCity} onValueChange={setFilterCity}>
+                                <SelectTrigger className="w-full h-11 rounded-xl bg-white border-gray-200 text-sm font-medium">
+                                    <SelectValue placeholder="Filter by City" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Cities</SelectItem>
+                                    {availableCities.map((ct) => (
+                                        <SelectItem key={ct} value={ct}>
+                                            {ct}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="p-0">
-                    {/* Mobile Card View */}
-                    <div className="md:hidden divide-y">
-                        {filteredUsers.length === 0 ? (
-                            <div className="text-center py-8 text-muted-foreground">
-                                <p className="text-sm">No users found</p>
-                            </div>
-                        ) : (
-                            filteredUsers.map((user) => (
-                                <div key={user._id} className="p-4 space-y-3">
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                                <span className="font-bold text-blue-600 text-sm">
-                                                    {user.name.charAt(0).toUpperCase()}
-                                                </span>
-                                            </div>
-                                            <div className="min-w-0">
-                                                <p className="font-semibold text-sm text-gray-900 truncate">{user.name}</p>
-                                                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                                            </div>
-                                        </div>
-                                        <Badge className={`${getRoleBadge(user.role)} text-[10px] px-2 py-0.5`}>
-                                            {user.role === "propertyOwner" ? "Owner" :
-                                                user.role === "receptionist" ? "Receptionist" : user.role}
-                                        </Badge>
-                                    </div>
-                                    <div className="flex items-center justify-between text-xs">
-                                        <div className="flex gap-4 text-muted-foreground">
-                                            <span>{user.phone || "No phone"}</span>
-                                            <span>Joined {new Date(user.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}</span>
-                                        </div>
-                                        <div className="flex gap-1">
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="h-8 w-8"
-                                                onClick={() => handleEditRole(user)}
-                                            >
-                                                <MdEdit className="h-4 w-4" />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="h-8 w-8 text-red-600"
-                                                onClick={() => handleDeleteUser(user._id, user.name)}
-                                            >
-                                                <MdDelete className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
 
-                    {/* Desktop Table View */}
-                    <div className="hidden md:block overflow-x-auto">
-                        <table className="w-full">
+                <CardContent className="p-0">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left">
                             <thead>
-                                <tr className="border-b bg-gray-50">
-                                    <th className="text-left py-3 px-4 font-semibold text-sm">Name</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-sm">Email</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-sm">Phone</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-sm">Role</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-sm">Joined</th>
-                                    <th className="text-right py-3 px-4 font-semibold text-sm">Actions</th>
+                                <tr className="border-b border-gray-100 bg-gray-50/80 text-xs font-bold uppercase tracking-wider text-gray-500">
+                                    <th className="py-3.5 px-5">Customer / Admin</th>
+                                    <th className="py-3.5 px-4">Role</th>
+                                    <th className="py-3.5 px-4">IP Address</th>
+                                    <th className="py-3.5 px-4">Resolved Location</th>
+                                    <th className="py-3.5 px-4">GPS Coordinates</th>
+                                    <th className="py-3.5 px-4">Joined / Active</th>
+                                    <th className="py-3.5 px-5 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="divide-y divide-gray-100 text-sm font-medium text-gray-700">
                                 {filteredUsers.length === 0 ? (
                                     <tr>
-                                        <td colSpan={6} className="text-center py-12 text-muted-foreground">
-                                            No users found
+                                        <td colSpan={7} className="text-center py-12 text-gray-500">
+                                            No matching customers or admins found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredUsers.map((user) => (
-                                        <tr key={user._id} className="border-b hover:bg-gray-50">
-                                            <td className="py-4 px-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                                        <span className="font-bold text-blue-600">
+                                    paginatedUsers.map((user) => {
+                                        const coords = user.lastLocationCoordinates;
+                                        const mapsUrl =
+                                            coords?.lat && coords?.lng
+                                                ? `https://www.google.com/maps?q=${coords.lat},${coords.lng}`
+                                                : null;
+
+                                        return (
+                                            <tr key={user._id} className="hover:bg-blue-50/40 transition-colors">
+                                                {/* Customer Details */}
+                                                <td className="py-4 px-5">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm shrink-0">
                                                             {user.name.charAt(0).toUpperCase()}
-                                                        </span>
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-bold text-gray-900">{user.name}</p>
+                                                            <p className="text-xs text-gray-500">{user.email}</p>
+                                                            {user.phone && <p className="text-xs text-gray-400">{user.phone}</p>}
+                                                        </div>
                                                     </div>
-                                                    <span className="font-medium">{user.name}</span>
-                                                </div>
-                                            </td>
-                                            <td className="py-4 px-4 text-gray-600">{user.email}</td>
-                                            <td className="py-4 px-4 text-gray-600">{user.phone || "-"}</td>
-                                            <td className="py-4 px-4">
-                                                <Badge className={getRoleBadge(user.role)}>
-                                                    {user.role === "propertyOwner" ? "Property Owner" :
-                                                        user.role === "receptionist" ? "Receptionist" : user.role}
-                                                </Badge>
-                                            </td>
-                                            <td className="py-4 px-4 text-gray-600">
-                                                {new Date(user.createdAt).toLocaleDateString('en-IN')}
-                                            </td>
-                                            <td className="py-4 px-4">
-                                                <div className="flex gap-2 justify-end">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleEditRole(user)}
-                                                        title="Edit Role"
-                                                    >
-                                                        <MdEdit className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="text-red-600 hover:text-red-700 font-bold"
-                                                        onClick={() => handleDeleteUser(user._id, user.name)}
-                                                        title="Delete User"
-                                                    >
-                                                        <MdDelete className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
+                                                </td>
+
+                                                {/* Role */}
+                                                <td className="py-4 px-4">
+                                                    <Badge className={`${getRoleBadge(user.role)} border px-2.5 py-0.5 text-xs font-bold`}>
+                                                        {user.role === "user"
+                                                            ? "Customer"
+                                                            : user.role === "propertyOwner"
+                                                            ? "Owner"
+                                                            : user.role}
+                                                    </Badge>
+                                                </td>
+
+                                                {/* IP Address */}
+                                                <td className="py-4 px-4">
+                                                    {user.lastLoginIp ? (
+                                                        <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded-md text-gray-800">
+                                                            {user.lastLoginIp}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-xs text-gray-400 italic">No IP recorded</span>
+                                                    )}
+                                                </td>
+
+                                                {/* Location */}
+                                                <td className="py-4 px-4">
+                                                    {user.lastCity || user.lastState || user.lastCountry ? (
+                                                        <div className="flex items-center gap-1.5 text-gray-900 font-semibold">
+                                                            <MdLocationOn className="w-4 h-4 text-rose-500 shrink-0" />
+                                                            <span>
+                                                                {[user.lastCity, user.lastState, user.lastCountry]
+                                                                    .filter(Boolean)
+                                                                    .join(", ")}
+                                                            </span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-xs text-gray-400 italic">Pending GPS / IP</span>
+                                                    )}
+                                                </td>
+
+                                                {/* Coordinates & Google Map */}
+                                                <td className="py-4 px-4">
+                                                    {mapsUrl ? (
+                                                        <a
+                                                            href={mapsUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-bold bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg border border-blue-200 transition-colors"
+                                                        >
+                                                            <MdMap className="w-3.5 h-3.5" />
+                                                            <span>
+                                                                {coords?.lat?.toFixed(3)}, {coords?.lng?.toFixed(3)}
+                                                            </span>
+                                                            <ExternalLink className="w-3 h-3 ml-0.5" />
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-xs text-gray-400">-</span>
+                                                    )}
+                                                </td>
+
+                                                {/* Joined Date */}
+                                                <td className="py-4 px-4 text-xs text-gray-500">
+                                                    {user.createdAt && !isNaN(new Date(user.createdAt).getTime())
+                                                        ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                                                              month: "short",
+                                                              day: "numeric",
+                                                              year: "numeric",
+                                                          })
+                                                        : "Active"}
+                                                </td>
+
+                                                {/* Actions */}
+                                                <td className="py-4 px-5 text-right">
+                                                    <div className="flex items-center justify-end gap-1.5">
+                                                        <button
+                                                            type="button"
+                                                            className="w-8 h-8 rounded-lg flex items-center justify-center text-blue-600 hover:text-blue-800 hover:bg-blue-100 transition-colors cursor-pointer"
+                                                            onClick={() => {
+                                                                setSelectedUser(user);
+                                                                setIsHistoryOpen(true);
+                                                            }}
+                                                            title="View Location History"
+                                                        >
+                                                            <MdHistory className="h-4 w-4" />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors cursor-pointer"
+                                                            onClick={() => handleEditRole(user)}
+                                                            title="Edit Role"
+                                                        >
+                                                            <MdEdit className="h-4 w-4" />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            className="w-8 h-8 rounded-lg flex items-center justify-center text-red-600 hover:text-red-800 hover:bg-red-100 transition-colors cursor-pointer"
+                                                            onClick={() => handleDeleteUser(user._id, user.name)}
+                                                            title="Delete User"
+                                                        >
+                                                            <MdDelete className="h-4 w-4" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
                                 )}
                             </tbody>
                         </table>
                     </div>
+
+                    {/* Pagination Controls */}
+                    {filteredUsers.length > 0 && (
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-gray-100 bg-gray-50/40">
+                            <p className="text-xs md:text-sm text-gray-500 font-medium">
+                                Showing <span className="text-gray-900 font-bold">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="text-gray-900 font-bold">{Math.min(currentPage * itemsPerPage, filteredUsers.length)}</span> of <span className="text-gray-900 font-bold">{filteredUsers.length}</span> records
+                            </p>
+
+                            <div className="flex items-center gap-1.5">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className="h-8 px-2.5 text-xs font-semibold gap-1"
+                                >
+                                    <ChevronLeft className="size-4" />
+                                    Prev
+                                </Button>
+
+                                <div className="flex items-center gap-1">
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                        .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
+                                        .map((p, idx, arr) => {
+                                            const prev = arr[idx - 1];
+                                            return (
+                                                <div key={p} className="flex items-center gap-1">
+                                                    {prev && p - prev > 1 && (
+                                                        <span className="text-xs text-gray-400 px-1">...</span>
+                                                    )}
+                                                    <Button
+                                                        variant={currentPage === p ? "default" : "outline"}
+                                                        size="sm"
+                                                        onClick={() => setCurrentPage(p)}
+                                                        className={`h-8 w-8 text-xs font-bold p-0 ${currentPage === p ? "bg-blue-600 text-white" : "text-gray-700"}`}
+                                                    >
+                                                        {p}
+                                                    </Button>
+                                                </div>
+                                            );
+                                        })}
+                                </div>
+
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="h-8 px-2.5 text-xs font-semibold gap-1"
+                                >
+                                    Next
+                                    <ChevronRight className="size-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
+
+            {/* Location History Modal */}
+            <Dialog open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+                <DialogContent className="sm:max-w-2xl w-[95%] rounded-3xl p-6">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            <MdHistory className="w-6 h-6 text-blue-600" />
+                            Location & Session Logs for {selectedUser?.name}
+                        </DialogTitle>
+                        <DialogDescription className="text-xs text-gray-500">
+                            {selectedUser?.email} • Role: {selectedUser?.role}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="mt-4 max-h-[400px] overflow-y-auto pr-1 space-y-3">
+                        {!selectedUser?.locationHistory || selectedUser.locationHistory.length === 0 ? (
+                            <div className="text-center py-8 text-gray-400">
+                                <MdLocationOn className="w-10 h-10 mx-auto mb-2 opacity-40" />
+                                <p className="text-sm">No historical location logs recorded yet.</p>
+                            </div>
+                        ) : (
+                            selectedUser.locationHistory
+                                .slice()
+                                .reverse()
+                                .map((hist, index) => {
+                                    const hasCoords = typeof hist.lat === "number" && typeof hist.lng === "number";
+                                    const mapLink = hasCoords
+                                        ? `https://www.google.com/maps?q=${hist.lat},${hist.lng}`
+                                        : null;
+
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="p-4 rounded-2xl border border-gray-100 bg-gray-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                                        >
+                                            <div className="space-y-1">
+                                                <div className="flex items-center gap-2 font-bold text-gray-900">
+                                                    <MdLocationOn className="w-4 h-4 text-rose-500 shrink-0" />
+                                                    <span>
+                                                        {hist.address ||
+                                                            [hist.city, hist.state, hist.country]
+                                                                .filter(Boolean)
+                                                                .join(", ") ||
+                                                            "Unknown Location"}
+                                                    </span>
+                                                </div>
+                                                <div className="flex items-center gap-3 text-gray-500">
+                                                    <span className="font-mono bg-white px-2 py-0.5 rounded border border-gray-200">
+                                                        IP: {hist.ip || "N/A"}
+                                                    </span>
+                                                    <span>
+                                                        {new Date(hist.trackedAt).toLocaleString("en-US", {
+                                                            month: "short",
+                                                            day: "numeric",
+                                                            year: "numeric",
+                                                            hour: "2-digit",
+                                                            minute: "2-digit",
+                                                        })}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {mapLink && (
+                                                <a
+                                                    href={mapLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors w-fit shrink-0"
+                                                >
+                                                    <MdMap className="w-4 h-4" />
+                                                    <span>View Map</span>
+                                                    <ExternalLink className="w-3 h-3" />
+                                                </a>
+                                            )}
+                                        </div>
+                                    );
+                                })
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

@@ -33,8 +33,8 @@ export async function POST(req: NextRequest) {
         // Create User
         // Note: The User model requires an email. 
         // We will generate a placeholder email for phone-based users if they don't provide one.
-        // Format: phone@urbanhost.local or similar.
-        const placeholderEmail = `${cleanPhone}@urbanhost.user`;
+        // Format: phone@stayntour.local or similar.
+        const placeholderEmail = `${cleanPhone}@stayntour.user`;
 
         const newUser = await User.create({
             name,

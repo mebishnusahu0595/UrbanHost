@@ -293,7 +293,7 @@ export default function BookingsPage() {
 
                                 <div className="flex items-center justify-between border-t px-4 py-3 bg-gray-50">
                                     <div className="font-bold text-base text-gray-900">
-                                        ₹{booking.amount.toLocaleString()}
+                                        ${booking.amount.toLocaleString()}
                                     </div>
                                     <div className="flex gap-2">
                                         {booking.status.toLowerCase() === 'pending' && (
@@ -406,7 +406,7 @@ export default function BookingsPage() {
                                         </TableCell>
                                         <TableCell className="text-right px-4">
                                             <div className="font-mono text-sm font-bold text-gray-900">
-                                                ₹{booking.amount.toLocaleString()}
+                                                ${booking.amount.toLocaleString()}
                                             </div>
                                         </TableCell>
                                         <TableCell className="text-center px-4">

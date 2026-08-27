@@ -25,7 +25,7 @@ export default function OurPoliciesPage() {
                         <div>
                             <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
                                 <Shield className="w-4 h-4" />
-                                <span>Urban Host Legal Framework</span>
+                                <span>StayNTour Legal Framework</span>
                             </div>
                             <h1 className="text-4xl md:text-5xl font-black text-[#0f294d] mb-4">Our Policies</h1>
                             <p className="text-gray-500 font-medium max-w-2xl leading-relaxed">
@@ -84,12 +84,12 @@ export default function OurPoliciesPage() {
                                     <div className="flex flex-col gap-6">
                                         <div className="pb-8 border-b border-gray-100">
                                             <h2 className="text-3xl font-black text-[#0f294d] mb-6">Privacy Policy</h2>
-                                            <p className="font-bold text-lg text-blue-600 mb-4">URBANHOST (A Brand of Kuber Hoteliers & Management Services Pvt. Ltd.)</p>
+                                            <p className="font-bold text-lg text-blue-600 mb-4">STAYNTOUR (A Brand of StayNTour Hospitality Pvt. Ltd.)</p>
                                             <p className="leading-relaxed">
-                                                Kuber Hoteliers & Management Services Pvt. Ltd. (“Company”, “we”, “our”, “us”) respects the privacy of all users (“you”, “your”) who access or use our website, booking services, and hospitality-related offerings under the brand name URBANHOST.
+                                                StayNTour Hospitality Pvt. Ltd. (“Company”, “we”, “our”, “us”) respects the privacy of all users (“you”, “your”) who access or use our website, booking services, and hospitality-related offerings under the brand name STAYNTOUR.
                                             </p>
                                             <p className="mt-4 leading-relaxed">
-                                                This Privacy Policy explains how we collect, use, store, share, and protect your personal information when you visit our website or use our services. By accessing or using URBANHOST services, you agree to the terms of this Privacy Policy.
+                                                This Privacy Policy explains how we collect, use, store, share, and protect your personal information when you visit our website or use our services. By accessing or using STAYNTOUR services, you agree to the terms of this Privacy Policy.
                                             </p>
                                         </div>
 
@@ -99,7 +99,7 @@ export default function OurPoliciesPage() {
                                                 <p>This Privacy Policy applies to:</p>
                                                 <ul className="grid md:grid-cols-2 gap-x-8 gap-y-2 list-none p-0">
                                                     {[
-                                                        "Visitors of the URBANHOST website",
+                                                        "Visitors of the STAYNTOUR website",
                                                         "Customers making hotel or stay bookings",
                                                         "Users contacting via phone/email/forms",
                                                         "Guests availing hospitality services"
@@ -165,7 +165,7 @@ export default function OurPoliciesPage() {
 
                                             <div className="space-y-4">
                                                 <h3 className="text-xl font-bold text-[#0f294d]">4. Cookies and Tracking Technologies</h3>
-                                                <p>URBANHOST uses cookies to enhance performance, remember preferences, and analyze traffic. You can disable these in your browser, though it may limit site features.</p>
+                                                <p>STAYNTOUR uses cookies to enhance performance, remember preferences, and analyze traffic. You can disable these in your browser, though it may limit site features.</p>
                                             </div>
 
                                             <div className="space-y-4">
@@ -201,7 +201,7 @@ export default function OurPoliciesPage() {
 
                                             <div className="space-y-4">
                                                 <h3 className="text-xl font-bold text-[#0f294d]">9. Third-Party Links and OTA Platforms</h3>
-                                                <p>UrbanHost properties may be on platforms like Booking.com, MakeMyTrip, etc. These platforms have their own independent privacy policies.</p>
+                                                <p>StayNTour properties may be on platforms like Booking.com, MakeMyTrip, etc. These platforms have their own independent privacy policies.</p>
                                             </div>
 
                                             <div className="space-y-4">
@@ -233,7 +233,7 @@ export default function OurPoliciesPage() {
                                 {/* 2. TERMS & CONDITIONS */}
                                 <div id="terms" className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-gray-100 scroll-mt-32">
                                     <h2 className="text-3xl font-black text-[#0f294d] mb-6">Terms & Conditions</h2>
-                                    <p className="font-bold text-lg text-blue-600 mb-6">URBANHOST (A Brand of Kuber Hoteliers & Management Services Pvt. Ltd.)</p>
+                                    <p className="font-bold text-lg text-blue-600 mb-6">STAYNTOUR (A Brand of StayNTour Hospitality Pvt. Ltd.)</p>
 
                                     <div className="prose prose-blue max-w-none space-y-10">
                                         <p>By accessing or using our services, you agree to comply with the following Terms & Conditions.</p>
@@ -251,7 +251,7 @@ export default function OurPoliciesPage() {
                                                 <li>Timings are strictly as per individual hotel policies.</li>
                                             </ul>
                                             <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl text-sm font-medium text-orange-900">
-                                                URBANHOST reserves the right to cancel bookings with incorrect information.
+                                                STAYNTOUR reserves the right to cancel bookings with incorrect information.
                                             </div>
                                         </div>
 
@@ -277,12 +277,12 @@ export default function OurPoliciesPage() {
 
                                         <div className="space-y-4">
                                             <h3 className="text-xl font-bold text-[#0f294d]">7. Limitation of Liability</h3>
-                                            <p>UrbanHost is not liable for loss of belongings, natural event disruptions, or third-party gateaway failures. Liability is limited to booking amount paid.</p>
+                                            <p>StayNTour is not liable for loss of belongings, natural event disruptions, or third-party gateaway failures. Liability is limited to booking amount paid.</p>
                                         </div>
 
                                         <div className="space-y-4">
                                             <h3 className="text-xl font-bold text-[#0f294d]">8. Intellectual Property</h3>
-                                            <p>The Logo, brand name, text, and designs are property of Kuber Hoteliers & URBANHOST.</p>
+                                            <p>The Logo, brand name, text, and designs are property of STAYNTOUR.</p>
                                         </div>
 
                                         <div className="space-y-4">
@@ -295,7 +295,7 @@ export default function OurPoliciesPage() {
                                 {/* 3. CANCELLATION & REFUND POLICY */}
                                 <div id="refund" className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-gray-100 scroll-mt-32">
                                     <h2 className="text-3xl font-black text-[#0f294d] mb-6">Cancellation & Refund Policy</h2>
-                                    <p className="font-bold text-lg text-blue-600 mb-8">URBANHOST (Kuber Hoteliers & Management Services Pvt. Ltd.)</p>
+                                    <p className="font-bold text-lg text-blue-600 mb-8">STAYNTOUR (StayNTour Hospitality Pvt. Ltd.)</p>
 
                                     <div className="prose prose-blue max-w-none space-y-12">
                                         <div>
@@ -326,7 +326,7 @@ export default function OurPoliciesPage() {
                                                 <p>Date or guest modifications are subject to availability, price differences, and approval.</p>
                                             </div>
                                             <div>
-                                                <h4 className="font-bold text-gray-900 mb-2">4. Cancellation by URBANHOST</h4>
+                                                <h4 className="font-bold text-gray-900 mb-2">4. Cancellation by STAYNTOUR</h4>
                                                 <p>In cases of operational issues or force majeure, full refund will be provided.</p>
                                             </div>
                                             <div>
@@ -340,7 +340,7 @@ export default function OurPoliciesPage() {
                                 {/* 4. COOKIE POLICY */}
                                 <div id="cookies" className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-gray-100 scroll-mt-32">
                                     <h2 className="text-3xl font-black text-[#0f294d] mb-6">Cookie Policy</h2>
-                                    <p className="font-bold text-lg text-blue-600 mb-8">URBANHOST (A Brand of Kuber Hoteliers & Management Services Pvt. Ltd.)</p>
+                                    <p className="font-bold text-lg text-blue-600 mb-8">STAYNTOUR (A Brand of StayNTour Hospitality Pvt. Ltd.)</p>
 
                                     <div className="prose prose-blue max-w-none space-y-10">
                                         <div>
@@ -382,10 +382,10 @@ export default function OurPoliciesPage() {
                                 <div className="text-center bg-blue-900 rounded-[2.5rem] p-12 text-white shadow-2xl">
                                     <p className="text-sm opacity-60 uppercase tracking-widest font-black mb-4">Agreement</p>
                                     <p className="text-lg font-medium leading-relaxed max-w-2xl mx-auto">
-                                        All bookings are subject to availability and confirmation. URBANHOST is not responsible for third-party OTA policies, payment gateway delays, or external service disruptions. By using this website, you agree to our Privacy Policy, Terms & Conditions, Cancellation & Refund Policy, and Cookie Policy.
+                                        All bookings are subject to availability and confirmation. STAYNTOUR is not responsible for third-party OTA policies, payment gateway delays, or external service disruptions. By using this website, you agree to our Privacy Policy, Terms & Conditions, Cancellation & Refund Policy, and Cookie Policy.
                                     </p>
                                     <p className="mt-10 pt-8 border-t border-white/10 text-xs italic opacity-60">
-                                        © 2026 URBANHOST | Kuber Hoteliers & Management Services Pvt. Ltd.
+                                        © 2026 STAYNTOUR | StayNTour Hospitality Pvt. Ltd.
                                     </p>
                                 </div>
                             </motion.div>

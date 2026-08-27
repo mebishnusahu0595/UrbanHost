@@ -29,9 +29,7 @@ export async function POST(req: NextRequest) {
         const saveFile = async (file: File, folder: string) => {
             const buffer = Buffer.from(await file.arrayBuffer());
             const filename = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-            const uploadDir = process.env.NODE_ENV === 'production'
-                ? path.join('/var/www/urbanhost/uploads', folder)
-                : path.join(process.cwd(), 'public', 'uploads', folder);
+            const uploadDir = path.join(process.cwd(), 'public', 'uploads', folder);
 
             if (!fs.existsSync(uploadDir)) {
                 fs.mkdirSync(uploadDir, { recursive: true });

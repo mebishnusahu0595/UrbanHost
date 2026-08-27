@@ -177,7 +177,7 @@ export const authOptions: NextAuthOptions = {
                     if (!existingUser) {
                         // Create new user for Google sign-in
                         existingUser = await User.create({
-                            name: user.name || "Urban Host User",
+                            name: user.name || "StayNTour User",
                             email: user.email?.toLowerCase() || "",
                             avatar: user.image || "",
                             role: "user",
@@ -230,6 +230,18 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
+    cookies: {
+        sessionToken: {
+            name: process.env.NODE_ENV === "production" ? "__Secure-next-auth.session-token" : "next-auth.session-token",
+            options: {
+                httpOnly: true,
+                sameSite: "lax",
+                path: "/",
+                domain: process.env.NODE_ENV === "production" ? ".stayntour.com" : undefined,
+                secure: process.env.NODE_ENV === "production",
+            },
+        },
+    },
     secret: process.env.NEXTAUTH_SECRET,
-    useSecureCookies: false, // Disable secure cookies for HTTP
+    useSecureCookies: process.env.NODE_ENV === "production",
 };

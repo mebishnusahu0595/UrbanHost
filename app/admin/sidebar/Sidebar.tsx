@@ -151,8 +151,8 @@ export function Sidebar() {
             <div className="fixed top-0 left-0 right-0 h-16 bg-white border-b z-50 flex items-center justify-between px-4 md:hidden">
                 <div className="flex items-center gap-2">
                     <Image
-                        src="/list_property.png"
-                        alt="UrbanHöst"
+                        src="/logo_name.png"
+                        alt="StayNTour"
                         width={60}
                         height={60}
                         className="h-10 w-10 object-contain"
@@ -188,19 +188,19 @@ export function Sidebar() {
                 )}
             >
                 {/* Logo Section */}
-                <div className="flex h-40 items-center justify-center border-b px-6 bg-white">
-                    <div className="flex flex-col items-center gap-4">
+                <div className="flex h-28 items-center justify-center border-b px-6 bg-white">
+                    <div className="flex flex-col items-center gap-2">
                         <Image
-                            src="/list_property.png"
-                            alt="UrbanHöst"
-                            width={160}
-                            height={160}
-                            className="h-20 w-20 object-contain"
+                            src="/logo_name.png"
+                            alt="StayNTour"
+                            width={180}
+                            height={52}
+                            className="h-10 w-auto object-contain"
                             priority
                             quality={100}
                             unoptimized
                         />
-                        <span className="text-2xl font-black uppercase tracking-[0.2em] text-[#1E3A8A] text-center">Admin Portal</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1E3A8A] text-center">Admin Portal</span>
                     </div>
                 </div>
 

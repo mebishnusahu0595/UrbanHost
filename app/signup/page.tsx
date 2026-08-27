@@ -146,22 +146,13 @@ export default function SignUpPage() {
           </Link>
 
           <div className="space-y-3 md:space-y-6 text-center">
-            <Link href="/" className="inline-flex items-center mx-auto -ml-12">
-              <Image
-                src="/list_property.png"
-                alt="Urban Host Icon"
-                width={100}
-                height={100}
-                className="h-24 w-auto object-contain"
-                quality={100}
-                unoptimized
-              />
+            <Link href="/" className="inline-flex items-center justify-center mx-auto mb-2">
               <Image
                 src="/logo_name.png"
-                alt="Urban Host"
-                width={500}
-                height={150}
-                className="h-48 w-auto -ml-6 object-contain"
+                alt="StayNTour"
+                width={210}
+                height={58}
+                className="h-12 md:h-14 w-auto object-contain"
                 quality={100}
                 unoptimized
               />
@@ -356,13 +347,12 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <Button
+              <button
                 type="button"
-                variant="outline"
                 onClick={handleGoogleSignIn}
-                className="w-full h-12 text-base font-semibold border-gray-300"
+                className="w-full h-12 text-base font-semibold border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-800 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded-xl transition-colors duration-150 shadow-sm"
               >
-                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 mr-2 shrink-0" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -380,8 +370,8 @@ export default function SignUpPage() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                Sign up with Google
-              </Button>
+                <span>Sign up with Google</span>
+              </button>
             </div>
           </form>
         </div>

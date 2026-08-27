@@ -206,7 +206,7 @@ export default function PromotionsPage() {
                                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="percentage">Percentage (%)</SelectItem>
-                                                    <SelectItem value="flat">Flat Amount (₹)</SelectItem>
+                                                    <SelectItem value="flat">Flat Amount ($)</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </div>
@@ -214,18 +214,18 @@ export default function PromotionsPage() {
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <Label>Discount Value {newCoupon.discountType === 'percentage' ? '(%)' : '(₹)'}</Label>
+                                            <Label>Discount Value {newCoupon.discountType === 'percentage' ? '(%)' : '($)'}</Label>
                                             <Input type="number" placeholder="10" value={newCoupon.discountAmount} onChange={(e) => setNewCoupon({ ...newCoupon, discountAmount: e.target.value })} />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label>Min. Order Value (₹)</Label>
+                                            <Label>Min. Order Value ($)</Label>
                                             <Input type="number" placeholder="0" value={newCoupon.minOrderValue} onChange={(e) => setNewCoupon({ ...newCoupon, minOrderValue: e.target.value })} />
                                         </div>
                                     </div>
 
                                     {newCoupon.discountType === 'percentage' && (
                                         <div className="space-y-2">
-                                            <Label>Max Discount Limit (₹) - Optional</Label>
+                                            <Label>Max Discount Limit ($) - Optional</Label>
                                             <Input type="number" placeholder="Enter max limit or 0 for unlimited" value={newCoupon.maxDiscount} onChange={(e) => setNewCoupon({ ...newCoupon, maxDiscount: e.target.value })} />
                                         </div>
                                     )}
@@ -283,8 +283,8 @@ export default function PromotionsPage() {
                                         <TableRow key={coupon._id}>
                                             <TableCell className="font-bold font-mono">{coupon.code}</TableCell>
                                             <TableCell>
-                                                {coupon.discountType === 'flat' ? `₹${coupon.discountAmount}` : `${coupon.discountAmount}%`}
-                                                {coupon.maxDiscount > 0 && <span className="text-xs text-gray-400 block">Up to ₹{coupon.maxDiscount}</span>}
+                                                {coupon.discountType === 'flat' ? `$${coupon.discountAmount}` : `${coupon.discountAmount}%`}
+                                                {coupon.maxDiscount > 0 && <span className="text-xs text-gray-400 block">Up to ${coupon.maxDiscount}</span>}
                                             </TableCell>
                                             <TableCell className="text-xs">
                                                 {new Date(coupon.startDate).toLocaleDateString()} - <br />

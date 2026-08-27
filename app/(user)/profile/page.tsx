@@ -437,8 +437,8 @@ export default function ProfilePage() {
                                         <Wallet className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-gray-900">Urban Host Credits</h3>
-                                        <p className="text-sm text-blue-800 mt-1 mb-3">You have ₹0 in travel credits available for your next booking.</p>
+                                        <h3 className="font-bold text-gray-900">StayNTour Credits</h3>
+                                        <p className="text-sm text-blue-800 mt-1 mb-3">You have $0 in travel credits available for your next booking.</p>
                                         <Link href="#" className="text-sm font-semibold text-blue-700 hover:underline">View History</Link>
                                     </div>
                                 </div>
@@ -454,17 +454,19 @@ export default function ProfilePage() {
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium text-gray-700">Preferred Currency</label>
                                         <select className="w-full h-11 rounded-xl bg-gray-50 border-gray-200 p-2.5 text-gray-900 focus:ring-2 focus:ring-blue-100 outline-none">
-                                            <option>Indian Rupee (₹)</option>
                                             <option>US Dollar ($)</option>
                                             <option>Euro (€)</option>
+                                            <option>British Pound (£)</option>
+                                            <option>Indian Rupee ($)</option>
                                         </select>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium text-gray-700">Preferred Language</label>
                                         <select className="w-full h-11 rounded-xl bg-gray-50 border-gray-200 p-2.5 text-gray-900 focus:ring-2 focus:ring-blue-100 outline-none">
-                                            <option>English (India)</option>
-                                            <option>Hindi</option>
-                                            <option>Bengali</option>
+                                            <option>English (US)</option>
+                                            <option>Spanish</option>
+                                            <option>French</option>
+                                            <option>German</option>
                                         </select>
                                     </div>
                                 </div>

@@ -109,15 +109,15 @@ export default function PropertyOwnerDashboard() {
     }
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'INR',
+            currency: 'USD',
             maximumFractionDigits: 0,
         }).format(amount);
     };
 
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-IN', {
+        return new Date(dateString).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
@@ -197,7 +197,7 @@ export default function PropertyOwnerDashboard() {
                     </CardHeader>
                     <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
                         <div className="text-lg md:text-2xl font-bold">
-                            {stats ? formatCurrency(stats.totalEarnings) : '₹0'}
+                            {stats ? formatCurrency(stats.totalEarnings) : '$0'}
                         </div>
                         <div className="text-[10px] md:text-xs text-muted-foreground mt-1">
                             From confirmed bookings
@@ -214,7 +214,7 @@ export default function PropertyOwnerDashboard() {
                     </CardHeader>
                     <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
                         <div className="text-lg md:text-2xl font-bold">
-                            {stats ? formatCurrency(stats.thisMonthEarnings) : '₹0'}
+                            {stats ? formatCurrency(stats.thisMonthEarnings) : '$0'}
                         </div>
                         <div className="text-[10px] md:text-xs text-muted-foreground mt-1">
                             Current month earnings

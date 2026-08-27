@@ -600,7 +600,7 @@ export default function PropertyEditPage({ params }: PropertyEditProps) {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <Label>Price per Night (₹) <span className="text-red-500">*</span></Label>
+                                                    <Label>Price per Night ($) <span className="text-red-500">*</span></Label>
                                                     <Input
                                                         type="number"
                                                         value={room.price || ""}
@@ -974,7 +974,7 @@ export default function PropertyEditPage({ params }: PropertyEditProps) {
                                                         />
                                                     </div>
                                                     <div className="w-full md:w-48">
-                                                        <Label className="text-xs font-bold uppercase text-gray-500 mb-1 block">Price (₹)</Label>
+                                                        <Label className="text-xs font-bold uppercase text-gray-500 mb-1 block">Price ($)</Label>
                                                         <Input
                                                             type="number"
                                                             value={addon.price}

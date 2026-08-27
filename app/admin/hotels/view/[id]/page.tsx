@@ -211,7 +211,7 @@ export default function AdminHotelViewPage({ params }: { params: Promise<{ id: s
                                                 ))}
                                             </div>
                                             <div className="pt-3 md:pt-4 border-t border-gray-50 flex items-baseline">
-                                                <span className="text-lg md:text-xl font-black text-gray-900">₹{room.price}</span>
+                                                <span className="text-lg md:text-xl font-black text-gray-900">${room.price}</span>
                                                 <span className="text-[10px] md:text-xs text-gray-500 font-medium ml-1">/ night base price</span>
                                             </div>
                                         </div>
@@ -233,7 +233,7 @@ export default function AdminHotelViewPage({ params }: { params: Promise<{ id: s
                                                     <p className="text-xs text-gray-500 mt-1">{addon.description}</p>
                                                 )}
                                             </div>
-                                            <span className="font-black text-blue-600">₹{addon.price}</span>
+                                            <span className="font-black text-blue-600">${addon.price}</span>
                                         </div>
                                     ))
                                 ) : (
@@ -255,7 +255,7 @@ export default function AdminHotelViewPage({ params }: { params: Promise<{ id: s
                                 <CardContent className="p-4 md:p-6 space-y-3 md:space-y-4">
                                     <div className="flex justify-between items-center text-xs md:text-sm">
                                         <span className="text-gray-500 font-medium">Starting Price</span>
-                                        <span className="text-lg md:text-xl font-black text-gray-900">₹{hotelRooms[0]?.price || 0}</span>
+                                        <span className="text-lg md:text-xl font-black text-gray-900">${hotelRooms[0]?.price || 0}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-xs md:text-sm border-t border-gray-50 pt-3 md:pt-4">
                                         <span className="text-gray-500 font-medium">Total Room Types</span>

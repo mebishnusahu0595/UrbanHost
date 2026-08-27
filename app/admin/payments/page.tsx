@@ -137,7 +137,7 @@ export default function PaymentsPage() {
                         <CardTitle className="text-sm font-medium opacity-80 text-white">Total Revenue</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl md:text-3xl font-bold">₹{totalRevenue.toLocaleString()}</div>
+                        <div className="text-2xl md:text-3xl font-bold">${totalRevenue.toLocaleString()}</div>
                         <p className="text-xs mt-1 opacity-70">Based on current filters</p>
                     </CardContent>
                 </Card>
@@ -156,7 +156,7 @@ export default function PaymentsPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl md:text-3xl font-bold">
-                            ₹{successfulTransactions > 0 ? (totalRevenue / successfulTransactions).toFixed(0).toLocaleString() : 0}
+                            ${successfulTransactions > 0 ? (totalRevenue / successfulTransactions).toFixed(0).toLocaleString() : 0}
                         </div>
                         <p className="text-xs mt-1 text-muted-foreground">Per booking average</p>
                     </CardContent>
@@ -240,10 +240,10 @@ export default function PaymentsPage() {
                                         <tr key={p._id} className="hover:bg-gray-50 transition-colors">
                                             <td className="py-4 px-6">
                                                 <div className="font-medium text-gray-900">
-                                                    {new Date(p.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                    {new Date(p.createdAt).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
                                                 </div>
                                                 <div className="text-[10px] text-gray-400">
-                                                    {new Date(p.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                                                    {new Date(p.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                                                 </div>
                                             </td>
                                             <td className="py-4 px-6">
@@ -254,7 +254,7 @@ export default function PaymentsPage() {
                                                 <div className="font-medium truncate max-w-[150px]">{p.hotel.name}</div>
                                             </td>
                                             <td className="py-4 px-6 font-bold text-gray-900">
-                                                ₹{p.totalPrice.toLocaleString()}
+                                                ${p.totalPrice.toLocaleString()}
                                             </td>
                                             <td className="py-4 px-6 capitalize">
                                                 {p.paymentMethod || "Online"}

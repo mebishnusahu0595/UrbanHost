@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         }
 
         if (orderValue < coupon.minOrderValue) {
-            return NextResponse.json({ error: `Minimum order value of ₹${coupon.minOrderValue} required` }, { status: 400 });
+            return NextResponse.json({ error: `Minimum order value of $${coupon.minOrderValue} required` }, { status: 400 });
         }
 
         // Check if hotel is applicable

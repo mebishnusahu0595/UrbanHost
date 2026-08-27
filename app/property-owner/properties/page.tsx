@@ -98,9 +98,9 @@ export default function PropertiesPage() {
     };
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'INR',
+            currency: 'USD',
             maximumFractionDigits: 0,
         }).format(amount || 0);
     };
@@ -235,7 +235,7 @@ export default function PropertiesPage() {
                                                 </p>
                                             )}
                                             <p className="text-gray-400 text-xs">
-                                                Listed: {new Date(property.createdAt).toLocaleDateString('en-IN')}
+                                                Listed: {new Date(property.createdAt).toLocaleDateString('en-US')}
                                             </p>
                                         </div>
                                         <div className="flex gap-2">

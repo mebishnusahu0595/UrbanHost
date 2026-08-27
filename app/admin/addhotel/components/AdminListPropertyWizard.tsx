@@ -53,7 +53,7 @@ export default function AdminListPropertyWizard() {
     const [step, setStep] = useState<Step>("location");
 
     // Form State
-    const [location, setLocation] = useState("IN"); // Default to India (ISO Code)
+    const [location, setLocation] = useState("US"); // Default to USA (ISO Code)
     const [propertyType, setPropertyType] = useState<string | null>(null);
     const [propertyName, setPropertyName] = useState("");
 
@@ -97,7 +97,7 @@ export default function AdminListPropertyWizard() {
 
     // Contact State
     const [phoneType, setPhoneType] = useState("Mobile");
-    const [phoneCode, setPhoneCode] = useState("91");
+    const [phoneCode, setPhoneCode] = useState("1");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [emailBusiness, setEmailBusiness] = useState("");
     const [emailReservation, setEmailReservation] = useState("");
@@ -130,7 +130,7 @@ export default function AdminListPropertyWizard() {
     // Contract State
     const [contractSignatoryEmail, setContractSignatoryEmail] = useState("");
     const [contractSignatoryName, setContractSignatoryName] = useState("");
-    const [contractSignatoryPhoneCode, setContractSignatoryPhoneCode] = useState("91");
+    const [contractSignatoryPhoneCode, setContractSignatoryPhoneCode] = useState("1");
     const [contractSignatoryPhone, setContractSignatoryPhone] = useState("");
     const [contractingParty, setContractingParty] = useState("");
     const [isContractAgreed, setIsContractAgreed] = useState(false);
@@ -316,16 +316,15 @@ export default function AdminListPropertyWizard() {
             <header className="h-[72px] border-b flex items-center px-4 md:px-8 justify-between sticky top-0 bg-white z-20 shadow-sm">
                 <Link href="/admin/dashboard" className="flex items-center -ml-2">
                     <Image
-                        src="/list_property.png"
-                        alt="Urban Host Icon"
-                        width={50}
-                        height={50}
-                        className="h-9 w-auto"
+                        src="/logo_name.png"
+                        alt="StayNTour"
+                        width={150}
+                        height={42}
+                        className="h-9 w-auto object-contain"
                         priority
                         quality={100}
                         unoptimized
                     />
-                    <div className="ml-2 font-bold text-xl text-gray-900">Admin Portal</div>
                 </Link>
                 <div className="flex items-center gap-6 text-sm font-medium text-gray-600">
                     <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Admin Mode</span>
@@ -817,7 +816,7 @@ export default function AdminListPropertyWizard() {
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Price (₹)</label>
+                                                        <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Price ($)</label>
                                                         <Input
                                                             type="number"
                                                             value={room.price}
@@ -1062,7 +1061,7 @@ export default function AdminListPropertyWizard() {
                                         </div>
                                         <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer" onClick={() => setIsContractAgreed(!isContractAgreed)}>
                                             <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${isContractAgreed ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-400'}`}>{isContractAgreed && <Check className="w-3.5 h-3.5 text-white" />}</div>
-                                            <p className="text-xs text-gray-600">I confirm that this property meets all UrbanHost standards and authorize immediate listing.</p>
+                                            <p className="text-xs text-gray-600">I confirm that this property meets all StayNTour standards and authorize immediate listing.</p>
                                         </div>
                                     </div>
                                     <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t flex justify-between items-center z-50 md:sticky md:bottom-0 mt-8 rounded-b-xl">
@@ -1088,7 +1087,7 @@ export default function AdminListPropertyWizard() {
                                             <Check className="w-10 h-10" />
                                         </div>
                                         <h1 className="text-3xl font-black text-gray-900 mb-4">Property Listed Successfully!</h1>
-                                        <p className="text-lg text-gray-600 max-w-md mb-8">The property is now <strong>Live</strong> and bookable on UrbanHost.</p>
+                                        <p className="text-lg text-gray-600 max-w-md mb-8">The property is now <strong>Live</strong> and bookable on StayNTour.</p>
 
                                         <div className="flex gap-4">
                                             <Button onClick={() => router.push('/admin/dashboard')} variant="outline" className="h-12 px-8 font-bold rounded-xl border-2">Return to Dashboard</Button>

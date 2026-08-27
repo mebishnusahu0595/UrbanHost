@@ -6,7 +6,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Facebook, Twitter, Instagram, Linkedin, Heart } from "lucide-react";
 
+import { useState, useEffect } from "react";
+
 export function Footer() {
+    const [mainOrigin, setMainOrigin] = useState("");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const host = window.location.hostname.toLowerCase();
+            if (host.includes("stayntour.com") && (host.startsWith("partner.") || host.startsWith("admin.") || host.startsWith("superadmin.") || host.startsWith("listproperty."))) {
+                setMainOrigin("https://stayntour.com");
+            }
+        }
+    }, []);
+
     return (
         <footer className="bg-white border-t border-gray-100">
             {/* Desktop Full Footer */}
@@ -14,28 +27,19 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     {/* Logo & Description */}
                     <div className="space-y-6">
-                        <Link href="/" className="flex items-center">
-                            <Image
-                                src="/list_property.png"
-                                alt="Urban Host Icon"
-                                width={80}
-                                height={80}
-                                className="h-20 w-auto"
-                                quality={100}
-                                unoptimized
-                            />
+                        <Link href={mainOrigin ? `${mainOrigin}/` : "/"} className="inline-flex items-center">
                             <Image
                                 src="/logo_name.png"
-                                alt="Urban Host"
-                                width={450}
-                                height={130}
-                                className="h-32 w-auto -ml-4"
+                                alt="StayNTour"
+                                width={190}
+                                height={54}
+                                className="h-12 w-auto object-contain"
                                 quality={100}
                                 unoptimized
                             />
                         </Link>
                         <p className="text-sm text-gray-500 leading-relaxed max-w-xs font-medium">
-                            Premium hotel booking experiences across India. Modern stays for the modern traveler.
+                            Premium hotel booking experiences across the USA. Modern stays for the modern traveler.
                         </p>
                         <div className="flex items-center gap-4">
                             {[Facebook, Instagram, Twitter, Linkedin].map((Icon, i) => (
@@ -106,7 +110,7 @@ export function Footer() {
 
                 <div className="mt-16 pt-8 border-t border-gray-50 flex flex-col md:flex-row items-center justify-between gap-6">
                     <p className="text-xs text-gray-400 font-bold">
-                        © 2026 Urban Host Property Services Private Limited.
+                        © 2026 StayNTour Property Services Private Limited.
                     </p>
                     <div className="flex items-center gap-8">
                         {[
@@ -123,22 +127,13 @@ export function Footer() {
             {/* Mobile Compact Footer */}
             <div className="md:hidden px-6 py-10">
                 <div className="flex flex-col items-center text-center gap-8">
-                    <Link href="/" className="flex items-center">
-                        <Image
-                            src="/list_property.png"
-                            alt="Urban Host Icon"
-                            width={60}
-                            height={60}
-                            className="h-12 w-auto"
-                            quality={100}
-                            unoptimized
-                        />
+                    <Link href={mainOrigin ? `${mainOrigin}/` : "/"} className="inline-flex items-center">
                         <Image
                             src="/logo_name.png"
-                            alt="Urban Host"
-                            width={300}
-                            height={80}
-                            className="h-22 w-auto -ml-3"
+                            alt="StayNTour"
+                            width={160}
+                            height={45}
+                            className="h-10 w-auto object-contain"
                             quality={100}
                             unoptimized
                         />
@@ -199,10 +194,10 @@ export function Footer() {
 
                     <div className="pt-8 border-t border-gray-100 w-full">
                         <p className="text-[10px] text-gray-400 font-black uppercase tracking-wider flex items-center justify-center">
-                            Made with <Heart className="w-3 h-3 text-red-500 fill-current mx-1" /> in India
+                            Made with <Heart className="w-3 h-3 text-red-500 fill-current mx-1" /> in USA
                         </p>
                         <p className="text-[10px] text-gray-300 font-bold mt-1">
-                            © 2026 URBANHOST | A Brand of Kuber Hoteliers & Management Services Pvt. Ltd.. All Rights Reserved.
+                            © 2026 StayNTour | StayNTour Hospitality Services.. All Rights Reserved.
                         </p>
                     </div>
                 </div>

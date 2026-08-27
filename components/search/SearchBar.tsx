@@ -28,7 +28,7 @@ export function SearchBar() {
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        const placeholders = ["Where are you going?", "Try 'Bhilai'", "Try 'Raipur'", "Try 'Durg'", "Search 'Hotels'"];
+        const placeholders = ["Where are you going?", "Try 'New York'", "Try 'Miami'", "Try 'Los Angeles'", "Try 'Las Vegas'", "Search 'Luxury Resorts'"];
         const typingSpeed = isDeleting ? 50 : 100;
         const pauseTime = 2000;
 

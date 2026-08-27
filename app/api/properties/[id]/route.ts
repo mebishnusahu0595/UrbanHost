@@ -126,9 +126,7 @@ export async function PATCH(
       const imageFiles = formData.getAll('images');
 
       if (imageFiles && imageFiles.length > 0) {
-        const uploadDir = process.env.NODE_ENV === 'production'
-          ? join('/var/www/urbanhost/uploads', 'properties')
-          : join(process.cwd(), 'public', 'uploads', 'properties');
+        const uploadDir = join(process.cwd(), 'public', 'uploads', 'properties');
         try { await mkdir(uploadDir, { recursive: true }); } catch (err) { }
 
         for (const fileItem of imageFiles) {
@@ -156,9 +154,7 @@ export async function PATCH(
         for (let i = 0; i < rooms.length; i++) {
           const roomImageFiles = formData.getAll(`room_${i}_image`);
           if (roomImageFiles && roomImageFiles.length > 0) {
-            const uploadDir = process.env.NODE_ENV === 'production'
-              ? join('/var/www/urbanhost/uploads', 'properties')
-              : join(process.cwd(), 'public', 'uploads', 'properties');
+            const uploadDir = join(process.cwd(), 'public', 'uploads', 'properties');
             try { await mkdir(uploadDir, { recursive: true }); } catch (err) { }
 
             for (const fileItem of roomImageFiles) {
@@ -186,9 +182,7 @@ export async function PATCH(
       for (const field of docFields) {
         const file = formData.get(field) as File;
         if (file && file.size > 0 && typeof file !== 'string') {
-          const uploadDir = process.env.NODE_ENV === 'production'
-            ? join('/var/www/urbanhost/uploads', 'documents')
-            : join(process.cwd(), 'public', 'uploads', 'documents');
+          const uploadDir = join(process.cwd(), 'public', 'uploads', 'documents');
           try { await mkdir(uploadDir, { recursive: true }); } catch (err) { }
           const bytes = await file.arrayBuffer();
           const buffer = Buffer.from(bytes);

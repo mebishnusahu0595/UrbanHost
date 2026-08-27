@@ -371,7 +371,7 @@ export default function PaymentPage() {
                                                 Processing Payment...
                                             </div>
                                         ) : (
-                                            `Pay ₹${totalAmount - discount}`
+                                            `Pay $${totalAmount - discount}`
                                         )}
                                     </Button>
                                 </form>
@@ -479,16 +479,16 @@ export default function PaymentPage() {
                             <div className="space-y-3 mb-4">
                                 <div className="flex justify-between text-gray-600 text-sm">
                                     <span>Room Charges ({nights} {nights === 1 ? 'night' : 'nights'} × {roomsCount} {parseInt(roomsCount) === 1 ? 'room' : 'rooms'})</span>
-                                    <span>₹{basePrice.toLocaleString()}</span>
+                                    <span>${basePrice.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-600 text-sm">
                                     <span>Taxes & Fees (12%)</span>
-                                    <span>₹{taxes.toLocaleString()}</span>
+                                    <span>${taxes.toLocaleString()}</span>
                                 </div>
                                 {discount > 0 && (
                                     <div className="flex justify-between text-sm bg-green-50 -mx-6 px-6 py-2">
                                         <span className="text-green-700 font-medium">Coupon Discount ({appliedCouponCode})</span>
-                                        <span className="text-green-600 font-semibold">-₹{discount.toLocaleString()}</span>
+                                        <span className="text-green-600 font-semibold">-${discount.toLocaleString()}</span>
                                     </div>
                                 )}
                             </div>
@@ -498,12 +498,12 @@ export default function PaymentPage() {
                                 {discount > 0 && (
                                     <div className="flex justify-between text-gray-400 text-sm mb-1">
                                         <span>Original Total</span>
-                                        <span className="line-through">₹{totalAmount.toLocaleString()}</span>
+                                        <span className="line-through">${totalAmount.toLocaleString()}</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between font-bold text-gray-900 text-xl">
                                     <span>Total</span>
-                                    <span className={discount > 0 ? "text-green-600" : ""}>₹{(totalAmount - discount).toLocaleString()}</span>
+                                    <span className={discount > 0 ? "text-green-600" : ""}>${(totalAmount - discount).toLocaleString()}</span>
                                 </div>
                             </div>
 

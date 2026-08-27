@@ -29,7 +29,7 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                     <FiFileText className="w-8 h-8 text-blue-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                    URBANHOST Property Partner Agreement
+                    STAYNTOUR Property Partner Agreement
                 </h1>
                 <p className="text-gray-600">
                     Please review and accept the terms to complete your registration
@@ -46,7 +46,7 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                             <section>
                                 <h3 className="font-semibold text-gray-900 mb-2">1. Commission & Payment Settlement</h3>
                                 <p>
-                                    URBANHOST will charge a commission of 15-20% on each confirmed booking.
+                                    STAYNTOUR will charge a commission of 15-20% on each confirmed booking.
                                     Payments will be settled on a monthly basis, within 7 working days after month-end.
                                     All transactions will be processed through the registered bank account provided during onboarding.
                                 </p>
@@ -57,7 +57,7 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                                 <p>
                                     Properties must adhere to the cancellation policy selected during registration.
                                     Standard policy allows free cancellation up to 24 hours before check-in.
-                                    Any changes to the policy must be communicated and approved by URBANHOST.
+                                    Any changes to the policy must be communicated and approved by STAYNTOUR.
                                 </p>
                             </section>
 
@@ -84,7 +84,7 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                                 <p>
                                     Partners must keep pricing and room availability updated in real-time.
                                     Rate parity must be maintained across all booking platforms.
-                                    URBANHOST reserves the right to offer promotional discounts with prior notice.
+                                    STAYNTOUR reserves the right to offer promotional discounts with prior notice.
                                 </p>
                             </section>
 
@@ -100,8 +100,8 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                             <section>
                                 <h3 className="font-semibold text-gray-900 mb-2">7. Intellectual Property</h3>
                                 <p>
-                                    Partners grant URBANHOST the right to use property images, descriptions, and information
-                                    for marketing purposes. URBANHOST retains all rights to its brand, logo, and platform.
+                                    Partners grant STAYNTOUR the right to use property images, descriptions, and information
+                                    for marketing purposes. STAYNTOUR retains all rights to its brand, logo, and platform.
                                 </p>
                             </section>
 
@@ -109,7 +109,7 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                                 <h3 className="font-semibold text-gray-900 mb-2">8. Termination</h3>
                                 <p>
                                     Either party may terminate this agreement with 30 days written notice.
-                                    URBANHOST reserves the right to immediately suspend listings in case of policy violations,
+                                    STAYNTOUR reserves the right to immediately suspend listings in case of policy violations,
                                     guest complaints, or fraudulent activities.
                                 </p>
                             </section>
@@ -118,7 +118,7 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                                 <h3 className="font-semibold text-gray-900 mb-2">9. Liability</h3>
                                 <p>
                                     Partners are solely responsible for property maintenance, guest safety, and any incidents
-                                    occurring on the premises. URBANHOST acts as a booking platform and is not liable for
+                                    occurring on the premises. STAYNTOUR acts as a booking platform and is not liable for
                                     property-related issues.
                                 </p>
                             </section>
@@ -163,7 +163,7 @@ export default function AgreementPage({ onAccept, onBack }: AgreementPageProps) 
                             htmlFor="agree-terms"
                             className="text-sm text-gray-700 cursor-pointer leading-relaxed"
                         >
-                            I agree to the URBANHOST Property Partner Agreement, Commission & Payment Settlement Terms,
+                            I agree to the STAYNTOUR Property Partner Agreement, Commission & Payment Settlement Terms,
                             and Cancellation Policy. I understand that this is a legally binding agreement.
                         </label>
                     </div>

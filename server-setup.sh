@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Complete server setup script for UrbanHost
-# Run from ~/urban-host/urbanhost/ directory
+# Complete server setup script for StayNTour
+# Run from ~/stayntour/stayntour/ directory
 
-echo "🚀 Starting complete UrbanHost setup..."
+echo "🚀 Starting complete StayNTour setup..."
 
 # Update system
 echo "📦 Updating system..."
@@ -65,9 +65,9 @@ npm install
 # Create .env file
 echo "📝 Creating .env file..."
 cat > .env << 'EOL'
-MONGODB_URI=mongodb://localhost:27017/urbanhost
+MONGODB_URI=mongodb://localhost:27017/stayntour
 NEXTAUTH_URL=http://72.62.243.77
-NEXTAUTH_SECRET=UrbanHost-Super-Secret-Key-2026-Production
+NEXTAUTH_SECRET=StayNTour-Super-Secret-Key-2026-Production
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 EOL
@@ -82,8 +82,8 @@ npm run seed
 
 # Configure Nginx
 echo "⚙️  Configuring Nginx..."
-sudo cp nginx.conf /etc/nginx/sites-available/urbanhost
-sudo ln -sf /etc/nginx/sites-available/urbanhost /etc/nginx/sites-enabled/
+sudo cp nginx.conf /etc/nginx/sites-available/stayntour
+sudo ln -sf /etc/nginx/sites-available/stayntour /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 
 # Test nginx config
@@ -102,7 +102,7 @@ pm2 delete all 2>/dev/null || true
 
 # Start application with PM2
 echo "🚀 Starting application..."
-pm2 start npm --name urbanhost -- start
+pm2 start npm --name stayntour -- start
 pm2 save
 pm2 startup | tail -n 1 | sudo bash
 
@@ -119,12 +119,12 @@ echo "🌐 Website: http://72.62.243.77"
 echo "📱 Admin Dashboard: http://72.62.243.77/admin/dashboard"
 echo ""
 echo "🔐 Admin Login:"
-echo "   Email: admin@urbanhost.com"
-echo "   Password: UrbanHosts123!"
+echo "   Email: admin@stayntour.com"
+echo "   Password: StayNTours123!"
 echo ""
 echo "📊 Check status:"
 echo "   pm2 list"
-echo "   pm2 logs urbanhost"
+echo "   pm2 logs stayntour"
 echo "   sudo systemctl status nginx"
 echo "   sudo systemctl status mongod"
 echo ""

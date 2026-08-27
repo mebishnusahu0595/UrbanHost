@@ -51,19 +51,19 @@ export async function GET(req: Request) {
             query.$and = andFilters;
         }
 
-        // Use aggregation to sort by "Urban Host Property" label availability
+        // Use aggregation to sort by "StayNTour Property" label availability
         const pipeline: any[] = [
             { $match: query },
             {
                 $addFields: {
-                    isUrbanHost: {
-                        $in: ["Urban Host Property", { $ifNull: ["$labels", []] }]
+                    isStayNTour: {
+                        $in: ["StayNTour Property", { $ifNull: ["$labels", []] }]
                     }
                 }
             },
             {
                 $sort: {
-                    isUrbanHost: -1,
+                    isStayNTour: -1,
                     featured: -1,
                     createdAt: -1
                 }

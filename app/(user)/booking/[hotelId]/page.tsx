@@ -96,7 +96,7 @@ export default function BookingPage() {
             if (typeof navigator !== 'undefined' && navigator.share) {
                 await navigator.share({
                     title: hotel?.name,
-                    text: `Booking at ${hotel?.name} on Urban Host`,
+                    text: `Booking at ${hotel?.name} on StayNTour`,
                     url: window.location.href,
                 });
             } else {
@@ -269,7 +269,7 @@ export default function BookingPage() {
                                 </Link>
                             </div>
                             <div className="flex items-center gap-2 text-blue-600 text-xs font-medium">
-                                <Check className="w-3.5 h-3.5" /> Book @ ₹0 available
+                                <Check className="w-3.5 h-3.5" /> Book @ $0 available
                             </div>
                         </div>
                         <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
@@ -290,7 +290,7 @@ export default function BookingPage() {
                                 return (
                                     <div key={addon.name} className="flex justify-between items-center gap-4 group">
                                         <div className="flex-1">
-                                            <h4 className="font-normal text-gray-800 text-sm">Add <span className="text-blue-600 font-medium">{addon.name}</span> for <span className="font-semibold text-gray-900">₹{addon.price}</span></h4>
+                                            <h4 className="font-normal text-gray-800 text-sm">Add <span className="text-blue-600 font-medium">{addon.name}</span> for <span className="font-semibold text-gray-900">${addon.price}</span></h4>
                                             {addon.description && <p className="text-[10px] text-gray-400 font-normal">{addon.description}</p>}
                                         </div>
                                         <button
@@ -337,8 +337,8 @@ export default function BookingPage() {
                         <Popover>
                             <PopoverTrigger asChild>
                                 <button className="flex items-center gap-1 group">
-                                    <span className="text-xl md:text-2xl font-bold text-gray-900">₹{grandTotal}</span>
-                                    <span className="text-gray-400 text-xs md:text-sm line-through decoration-red-400 font-medium">₹{Math.round(grandTotal * 1.3)}</span>
+                                    <span className="text-xl md:text-2xl font-bold text-gray-900">${grandTotal}</span>
+                                    <span className="text-gray-400 text-xs md:text-sm line-through decoration-red-400 font-medium">${Math.round(grandTotal * 1.3)}</span>
                                     <ChevronDown className="w-4 h-4 text-blue-600 ml-1 group-hover:text-blue-700" />
                                 </button>
                             </PopoverTrigger>
@@ -347,21 +347,21 @@ export default function BookingPage() {
                                 <div className="space-y-3 text-sm">
                                     <div className="flex justify-between">
                                         <span className="text-gray-600">Room: {selectedRoom.type} (x{roomsCount} Rooms, {nightsCount} Nights)</span>
-                                        <span className="font-medium text-gray-900">₹{roomPrice}</span>
+                                        <span className="font-medium text-gray-900">${roomPrice}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-gray-600">Taxes & Fees</span>
-                                        <span className="font-medium text-gray-900">₹{taxes}</span>
+                                        <span className="font-medium text-gray-900">${taxes}</span>
                                     </div>
                                     {addonsTotal > 0 && (
                                         <div className="flex justify-between">
                                             <span className="text-gray-600">Add-ons</span>
-                                            <span className="font-medium text-gray-900">₹{addonsTotal}</span>
+                                            <span className="font-medium text-gray-900">${addonsTotal}</span>
                                         </div>
                                     )}
                                     <div className="flex justify-between pt-3 border-t border-gray-100">
                                         <span className="font-bold text-gray-900">Total</span>
-                                        <span className="font-bold text-green-600">₹{grandTotal}</span>
+                                        <span className="font-bold text-green-600">${grandTotal}</span>
                                     </div>
                                 </div>
                             </PopoverContent>

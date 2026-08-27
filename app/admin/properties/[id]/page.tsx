@@ -485,7 +485,7 @@ export default function PropertyDetailPage() {
                                                 <div className="flex justify-between items-start">
                                                     <h3 className="text-lg font-bold text-gray-900">{room.type}</h3>
                                                     <div className="text-right">
-                                                        <div className="text-xl font-black text-gray-900">₹{room.price}</div>
+                                                        <div className="text-xl font-black text-gray-900">${room.price}</div>
                                                         <div className="text-xs text-gray-500">per night</div>
                                                     </div>
                                                 </div>
@@ -658,7 +658,7 @@ export default function PropertyDetailPage() {
                                 {
                                     title: "Agreement",
                                     fields: [
-                                        { key: "signedAgreement", label: "UrbanHost Agreement" },
+                                        { key: "signedAgreement", label: "StayNTour Agreement" },
                                     ]
                                 }
                             ].map((group, gIdx) => (

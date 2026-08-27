@@ -44,7 +44,7 @@ export interface IHotel extends Document {
   owner?: mongoose.Types.ObjectId;
   status: 'draft' | 'pending' | 'submitted' | 'approved' | 'published' | 'rejected';
   featured: boolean;
-  labels: string[]; // Featured, Urban Host Properties, Luxury, Budget-Friendly, etc.
+  labels: string[]; // Featured, StayNTour Properties, Luxury, Budget-Friendly, etc.
   category: string; // Hotel, Resort, Villa, Apartment, etc.
   documents: {
     // Ownership Proof
@@ -231,7 +231,7 @@ const hotelSchema = new Schema<IHotel>(
     labels: {
       type: [String],
       default: [],
-      // e.g., ['Featured', 'Urban Host Properties', 'Luxury', 'Budget-Friendly']
+      // e.g., ['Featured', 'StayNTour Properties', 'Luxury', 'Budget-Friendly']
     },
     category: {
       type: String,
@@ -354,6 +354,13 @@ const hotelSchema = new Schema<IHotel>(
 
 // Index for geospatial queries
 hotelSchema.index({ location: '2dsphere' });
+// Text search index for city, name, description
+hotelSchema.index({ name: 'text', description: 'text', 'address.city': 'text' });
+// Compound filtering indexes
+hotelSchema.index({ status: 1, featured: 1 });
+hotelSchema.index({ status: 1, 'address.city': 1 });
+hotelSchema.index({ owner: 1 });
+hotelSchema.index({ category: 1, status: 1 });
 
 const Hotel: Model<IHotel> = mongoose.models.Hotel || mongoose.model<IHotel>('Hotel', hotelSchema);
 

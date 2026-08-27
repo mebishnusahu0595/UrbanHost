@@ -15,6 +15,26 @@ export interface IUser extends Document {
   canEditHotels: boolean;
   otp?: string;
   otpExpiry?: Date;
+  lastLoginIp?: string;
+  lastLocationCoordinates?: {
+    lat: number;
+    lng: number;
+  };
+  lastLocationAddress?: string;
+  lastCity?: string;
+  lastState?: string;
+  lastCountry?: string;
+  locationHistory?: Array<{
+    ip?: string;
+    lat?: number;
+    lng?: number;
+    address?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    trackedAt: Date;
+    userAgent?: string;
+  }>;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -78,6 +98,45 @@ const userSchema = new Schema<IUser>(
       type: Date,
       select: false,
     },
+    lastLoginIp: {
+      type: String,
+      trim: true,
+    },
+    lastLocationCoordinates: {
+      lat: { type: Number },
+      lng: { type: Number },
+    },
+    lastLocationAddress: {
+      type: String,
+      trim: true,
+    },
+    lastCity: {
+      type: String,
+      trim: true,
+      index: true,
+    },
+    lastState: {
+      type: String,
+      trim: true,
+      index: true,
+    },
+    lastCountry: {
+      type: String,
+      trim: true,
+    },
+    locationHistory: [
+      {
+        ip: { type: String },
+        lat: { type: Number },
+        lng: { type: Number },
+        address: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        trackedAt: { type: Date, default: Date.now },
+        userAgent: { type: String },
+      },
+    ],
   },
   {
     timestamps: true,

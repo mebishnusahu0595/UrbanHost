@@ -10,18 +10,31 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Urban Host - Find Your Next Stay Effortlessly",
-  description: "Discover and book the best hotels at the best prices. Urban Host connects you with verified stays and experiences around the world.",
-  keywords: ["hotels", "booking", "travel", "stays", "vacation", "accommodation"],
+  title: "StayNTour - Find Your Next Stay Effortlessly",
+  description: "Discover and book the best hotels at the best prices. StayNTour connects you with verified stays and experiences around the world.",
+  keywords: ["hotels", "booking", "travel", "stays", "vacation", "accommodation", "stayntour"],
   openGraph: {
-    title: "Urban Host - Find Your Next Stay Effortlessly",
+    title: "StayNTour - Find Your Next Stay Effortlessly",
     description: "Discover and book the best hotels at the best prices.",
     type: "website",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "64x64", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
 import ChunkErrorListener from "@/components/ChunkErrorListener";
 import ScrollToTop from "@/components/ScrollToTop";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
+import { LocationTracker } from "@/components/common/LocationTracker";
+import { RouteTransitionLoader } from "@/components/common/RouteTransitionLoader";
 
 export default function RootLayout({
   children,
@@ -32,11 +45,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`} suppressHydrationWarning>
         <Providers>
-          <Suspense fallback={null}>
-            <ScrollToTop />
-          </Suspense>
-          <ChunkErrorListener />
-          {children}
+          <SmoothScrollProvider>
+            <Suspense fallback={null}>
+              <ScrollToTop />
+            </Suspense>
+            <LocationTracker />
+            <RouteTransitionLoader />
+            <ChunkErrorListener />
+            {children}
+          </SmoothScrollProvider>
         </Providers>
       </body>
     </html>

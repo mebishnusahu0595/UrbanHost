@@ -30,9 +30,9 @@ export async function POST(
 
         await dbConnect();
 
-        // Parse the body to get the label to toggle (default to "Urban Host Property")
+        // Parse the body to get the label to toggle (default to "StayNTour Property")
         const body = await req.json().catch(() => ({}));
-        const labelToToggle = body.label || "Urban Host Property";
+        const labelToToggle = body.label || "StayNTour Property";
 
         const hotel = await Hotel.findById(id);
 
@@ -58,7 +58,7 @@ export async function POST(
 
         hotel.labels = labels;
 
-        // Also toggle featured status if it's "Urban Host Property" (optional, but sorting often relies on featured)
+        // Also toggle featured status if it's "StayNTour Property" (optional, but sorting often relies on featured)
         // The user requirement is sorting, not necessarily featured flag. But often they go hand in hand.
         // I won't touch featured flag implicitly unless requested, but I'll make sure the label is saved.
 

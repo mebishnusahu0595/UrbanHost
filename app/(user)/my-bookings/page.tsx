@@ -72,7 +72,7 @@ export default function MyBookingsPage() {
         return matchesFilter && matchesSearch;
     });
 
-    const getStatusStyle = (status: String) => {
+    const getStatusStyle = (status: string) => {
         switch (status) {
             case "upcoming":
             case "confirmed":
@@ -245,7 +245,7 @@ export default function MyBookingsPage() {
                                                                 <span className="text-xs text-gray-500 font-medium">Booking ID: #{(booking._id || booking.id || "").slice(-6).toUpperCase()}</span>
                                                             </div>
                                                             <div className="text-xl font-bold text-gray-900">
-                                                                ₹{booking.totalPrice.toLocaleString("en-IN")}.00
+                                                                ${booking.totalPrice.toLocaleString("en-US")}.00
                                                             </div>
                                                         </div>
 

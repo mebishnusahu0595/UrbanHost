@@ -207,15 +207,15 @@ export default function BookingDetailPage() {
                             <CardTitle className="text-base md:text-xl">Payment Information</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3 md:space-y-4 pt-2 md:pt-4 p-4 md:p-6">
-                            <Row label={`${booking.roomType} (${nights} night${nights > 1 ? 's' : ''} × ₹${(basePrice / nights / (booking.numberOfRooms || 1)).toFixed(2)})`} value={`₹${basePrice.toFixed(2)}`} labelClass="text-gray-600" />
-                            <Row label="Taxes & Fees (12%)" value={`₹${taxes.toFixed(2)}`} labelClass="text-gray-600" />
-                            <Row label="Service Fee" value="₹0.00" labelClass="text-gray-600" />
+                            <Row label={`${booking.roomType} (${nights} night${nights > 1 ? 's' : ''} × $${(basePrice / nights / (booking.numberOfRooms || 1)).toFixed(2)})`} value={`$${basePrice.toFixed(2)}`} labelClass="text-gray-600" />
+                            <Row label="Taxes & Fees (12%)" value={`$${taxes.toFixed(2)}`} labelClass="text-gray-600" />
+                            <Row label="Service Fee" value="$0.00" labelClass="text-gray-600" />
 
                             <Separator />
 
                             <Row
                                 label="Total Amount Paid"
-                                value={`₹${booking.totalPrice.toLocaleString("en-IN")}`}
+                                value={`$${booking.totalPrice.toLocaleString("en-US")}`}
                                 bold
                                 valueClass="text-blue-600 text-base md:text-lg"
                             />

@@ -12,7 +12,7 @@ export default function BusinessPage() {
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
                         <Building2 className="w-4 h-4" />
-                        Urban Host for Business
+                        StayNTour for Business
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                         Corporate Travel Solutions
@@ -88,11 +88,11 @@ export default function BusinessPage() {
 
                 {/* Contact Section */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Interested in Urban Host for Business?</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Interested in StayNTour for Business?</h3>
                     <p className="text-gray-600 mb-6">
                         Contact our corporate sales team to learn more about our business solutions
                     </p>
-                    <a href="mailto:business@urbanhost.in" className="inline-block">
+                    <a href="mailto:business@stayntour.com" className="inline-block">
                         <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8">
                             Contact Sales Team
                         </Button>

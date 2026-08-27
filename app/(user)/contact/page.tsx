@@ -68,8 +68,8 @@ export default function ContactPage() {
         try {
             if (typeof navigator !== 'undefined' && navigator.share) {
                 await navigator.share({
-                    title: "Urban Host - Contact Us",
-                    text: "Get in touch with Urban Host for 24/7 support and partnership inquiries.",
+                    title: "StayNTour - Contact Us",
+                    text: "Get in touch with StayNTour for 24/7 support and partnership inquiries.",
                     url: window.location.href,
                 });
             } else {
@@ -218,7 +218,7 @@ export default function ContactPage() {
                                 icon={<FiMail className="w-5 h-5" />}
                                 title="Email Us"
                                 lines={[
-                                    "kuberhoteliers@gmail.com",
+                                    "info@stayntour.com",
                                 ]}
                             />
 
@@ -227,7 +227,7 @@ export default function ContactPage() {
                                 <div className="flex gap-3">
                                     <SocialIcon icon={<FiShare2 className="w-4 h-4" />} onClick={handleShare} />
                                     <SocialIcon icon={<FaYoutube className="w-4 h-4" />} href="https://youtube.com" />
-                                    <SocialIcon icon={<FaGlobe className="w-4 h-4" />} href="https://urbanhost.com" />
+                                    <SocialIcon icon={<FaGlobe className="w-4 h-4" />} href="https://stayntour.com" />
                                 </div>
                             </div>
                         </div>

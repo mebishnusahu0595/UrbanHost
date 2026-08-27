@@ -49,7 +49,7 @@
 :root {
   --radius: 0.625rem;
 
-  /* Urban Host Color Palette */
+  /* StayNTour Color Palette */
   --urban-blue: #1E3A8A;
   /* Header, footer, navigation, key headings */
   --soft-coral: #F87171;
@@ -308,4 +308,25 @@
 /* Image Loading Placeholder */
 .img-placeholder {
   @apply bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse;
+}
+
+/* Infinite Marquee Animation with Pause on Hover */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-infinite-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 45s linear infinite;
+  will-change: transform;
+}
+
+.animate-infinite-marquee:hover {
+  animation-play-state: paused !important;
 }

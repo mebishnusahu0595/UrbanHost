@@ -41,8 +41,8 @@ export default function PartnerPage() {
 
     const faqs = [
         {
-            question: "How does UrbanHost work?",
-            answer: "UrbanHost connects property owners with travelers looking for flexible and comfortable stays. We provide a platform to list your property and manage bookings efficiently."
+            question: "How does StayNTour work?",
+            answer: "StayNTour connects property owners with travelers looking for flexible and comfortable stays. We provide a platform to list your property and manage bookings efficiently."
         },
         {
             question: "Is there a commission fee?",
@@ -84,7 +84,7 @@ export default function PartnerPage() {
                         className="relative z-10 container mx-auto px-4 text-center text-white"
                     >
                         <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-md">
-                            Why partner with UrbanHost?
+                            Why partner with StayNTour?
                         </h1>
                         <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-90">
                             Join the fastest growing network of premium hotels and stays.
@@ -154,7 +154,7 @@ export default function PartnerPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
                         >
-                            <h2 className="text-3xl font-bold mb-10 text-center">Partner with UrbanHost & join the movement</h2>
+                            <h2 className="text-3xl font-bold mb-10 text-center">Partner with StayNTour & join the movement</h2>
                             <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl relative aspect-video bg-gray-800 group cursor-pointer border border-gray-700">
                                 <div className="absolute inset-0 flex items-center justify-center z-10">
                                     <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
@@ -185,7 +185,7 @@ export default function PartnerPage() {
                     >
                         <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to grow your hotel business?</h2>
                         <p className="text-xl mb-10 max-w-2xl mx-auto text-blue-100">
-                            Join thousands of hotels that trust UrbanHost to fill their rooms and increase their revenue.
+                            Join thousands of hotels that trust StayNTour to fill their rooms and increase their revenue.
                         </p>
                         <Link href="/partner/login">
                             <Button className="bg-white text-[#1E3A8A] hover:bg-gray-100 font-bold text-lg px-10 py-6 rounded-full shadow-lg transform hover:scale-105 transition-all">

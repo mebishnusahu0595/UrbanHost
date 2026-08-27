@@ -50,7 +50,7 @@ export default function AboutPage() {
                             global standards.
                         </h1>
                         <p className="text-base md:text-xl text-gray-200 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-                            Urban Host is your premium companion for discovering authenticity living.
+                            StayNTour is your premium companion for discovering authenticity living.
                             We bridge the gap between luxury and local immersion.
                         </p>
                         <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 md:px-10 py-5 md:py-7 text-base md:text-lg font-bold shadow-xl shadow-blue-500/20">
@@ -167,7 +167,7 @@ export default function AboutPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-16 gap-4 text-center md:text-left">
                         <div>
-                            <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-3 md:mb-4">The Minds Behind Urban Host</h2>
+                            <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-3 md:mb-4">The Minds Behind StayNTour</h2>
                             <p className="text-gray-500 max-w-xl text-base md:text-lg">A diverse group of travel enthusiasts, engineers, and designers.</p>
                         </div>
                         <div className="flex gap-4 justify-center md:justify-end">
@@ -256,7 +256,7 @@ export default function AboutPage() {
                         Ready to experience the heart of the city?
                     </h2>
                     <p className="text-base md:text-xl text-blue-50 mb-8 md:mb-12 max-w-2xl mx-auto relative z-10 font-medium">
-                        Join thousands of travelers who have found their second home with Urban Host.
+                        Join thousands of travelers who have found their second home with StayNTour.
                         Explore our boutique hotels and apartments today.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 relative z-10">

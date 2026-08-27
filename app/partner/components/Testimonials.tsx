@@ -10,14 +10,14 @@ export function Testimonials() {
         {
             name: "Sudhir Kumar",
             role: "General Manager, Lemon Tree Hotel",
-            text: "UrbanHost has been a game changer for us. We've seen a significant increase in our occupancy rates during off-peak hours thanks to their unique hourly booking model. The dashboard is intuitive and the support team is excellent.",
+            text: "StayNTour has been a game changer for us. We've seen a significant increase in our occupancy rates during off-peak hours thanks to their unique hourly booking model. The dashboard is intuitive and the support team is excellent.",
             rating: 5,
             image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop"
         },
         {
             name: "Anjali Mehta",
             role: "General Manager, The Park Hotel",
-            text: "UrbanHost's platform is incredibly user-friendly. We've optimized our room inventory like never before and seen a steady growth in revenue.",
+            text: "StayNTour's platform is incredibly user-friendly. We've optimized our room inventory like never before and seen a steady growth in revenue.",
             rating: 5,
             image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&auto=format&fit=crop"
         },
@@ -38,7 +38,7 @@ export function Testimonials() {
         {
             name: "Amit Kapoor",
             role: "Owner, Kapoor Residency",
-            text: "Finally, a platform that understands the budget hotel business. UrbanHost has helped us maximize our occupancy.",
+            text: "Finally, a platform that understands the budget hotel business. StayNTour has helped us maximize our occupancy.",
             rating: 5,
             image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop"
         },
@@ -85,7 +85,7 @@ export function Testimonials() {
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="text-gray-600 text-lg"
                         >
-                            Hear from trusted hotel managers and owners who have transformed their business with UrbanHost.
+                            Hear from trusted hotel managers and owners who have transformed their business with StayNTour.
                         </motion.p>
                     </div>
                     <div className="flex gap-3 relative z-10">

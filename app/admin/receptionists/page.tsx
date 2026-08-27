@@ -424,13 +424,13 @@ export default function ReceptionistsPage() {
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    placeholder="john.doe@urbanhost.com"
+                                    placeholder="john.doe@stayntour.com"
                                     required
                                     disabled={isEditMode}
                                 />
                                 {!isEditMode && (
                                     <p className="text-xs text-gray-500 mt-1">
-                                        Recommended: firstname.lastname@urbanhost.com
+                                        Recommended: firstname.lastname@stayntour.com
                                     </p>
                                 )}
                             </div>

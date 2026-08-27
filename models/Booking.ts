@@ -108,6 +108,13 @@ const bookingSchema = new Schema<IBooking>(
   }
 );
 
+// High-performance query indexes
+bookingSchema.index({ user: 1 });
+bookingSchema.index({ hotel: 1 });
+bookingSchema.index({ status: 1 });
+bookingSchema.index({ hotel: 1, checkInDate: 1, checkOutDate: 1, status: 1 });
+bookingSchema.index({ createdAt: -1 });
+
 const Booking: Model<IBooking> = mongoose.models.Booking || mongoose.model<IBooking>('Booking', bookingSchema);
 
 export default Booking;

@@ -1,12 +1,18 @@
 import nodemailer from "nodemailer";
 
+const smtpPort = parseInt(process.env.SMTP_PORT || "465");
+const isSecure = smtpPort === 465;
+
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: parseInt(process.env.SMTP_PORT || "587"),
-    secure: false, // true for 465, false for 587
+    host: process.env.SMTP_HOST || "mail.oncorg.com",
+    port: smtpPort,
+    secure: isSecure,
     auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
+        user: process.env.SMTP_USER || "info@oncorg.com",
+        pass: process.env.SMTP_PASSWORD || "",
+    },
+    tls: {
+        rejectUnauthorized: false,
     },
 });
 
@@ -14,13 +20,13 @@ export const sendApprovalWithCredentials = async (email: string, name: string, p
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">Partner Notification</p>
             </div>
             
             <div style="background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; text-align: center;">
                 <h2 style="margin: 0 0 10px 0; font-size: 24px;">Congratulations, ${name}!</h2>
-                <p style="margin: 0; opacity: 0.9; font-size: 16px;">Your property "<strong>${propertyName}</strong>" is now live on Urban Host.</p>
+                <p style="margin: 0; opacity: 0.9; font-size: 16px;">Your property "<strong>${propertyName}</strong>" is now live on StayNTour.</p>
             </div>
             
             <div style="background: #f8fafc; padding: 24px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
@@ -53,14 +59,14 @@ export const sendApprovalWithCredentials = async (email: string, name: string, p
             </div>
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
-                <p>© ${new Date().getFullYear()} Urban Host Hospitality Services. All rights reserved.</p>
-                <p>Support: kuberhoteliers@gmail.com</p>
+                <p>© ${new Date().getFullYear()} StayNTour Hospitality Services. All rights reserved.</p>
+                <p>Support: support@stayntour.com</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `🎉 Your Property "${propertyName}" is Live!`,
         html: htmlContent,
@@ -71,7 +77,7 @@ export const sendRejectionEmail = async (email: string, name: string, propertyNa
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
             </div>
             
             <div style="background: #fff1f2; color: #be123c; padding: 30px; border-radius: 16px; margin-bottom: 24px; text-align: center; border: 1px solid #fecdd3;">
@@ -81,7 +87,7 @@ export const sendRejectionEmail = async (email: string, name: string, propertyNa
             
             <div style="padding: 10px 0; color: #475569; line-height: 1.6;">
                 <p>Hi ${name},</p>
-                <p>Thank you for your interest in partnering with Urban Host. At this time, we are unable to approve your listing for <strong>${propertyName}</strong>.</p>
+                <p>Thank you for your interest in partnering with StayNTour. At this time, we are unable to approve your listing for <strong>${propertyName}</strong>.</p>
                 
                 ${reason ? `
                 <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin: 20px 0;">
@@ -103,14 +109,14 @@ export const sendRejectionEmail = async (email: string, name: string, propertyNa
             </div>
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px; margin-top: 30px;">
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
-                <p>Support: kuberhoteliers@gmail.com</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
+                <p>Support: support@stayntour.com</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `Property Update: "${propertyName}" Listing Status`,
         html: htmlContent,
@@ -121,7 +127,7 @@ export const sendReApprovalEmail = async (email: string, name: string, propertyN
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
             </div>
             
             <div style="background: #f0fdf4; color: #15803d; padding: 30px; border-radius: 16px; margin-bottom: 24px; text-align: center; border: 1px solid #bbf7d0;">
@@ -143,14 +149,14 @@ export const sendReApprovalEmail = async (email: string, name: string, propertyN
             </div>
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
-                <p>Support: kuberhoteliers@gmail.com</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
+                <p>Support: support@stayntour.com</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `✅ Re-Approved: "${propertyName}" is now Live!`,
         html: htmlContent,
@@ -161,12 +167,12 @@ export const sendPropertyLiveEmail = async (email: string, name: string, propert
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
             </div>
             
             <div style="background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; text-align: center;">
                 <h2 style="margin: 0 0 10px 0; font-size: 24px;">Your Property is Live!</h2>
-                <p style="margin: 0; opacity: 0.9; font-size: 16px;">"<strong>${propertyName}</strong>" is now active on Urban Host.</p>
+                <p style="margin: 0; opacity: 0.9; font-size: 16px;">"<strong>${propertyName}</strong>" is now active on StayNTour.</p>
             </div>
             
             <div style="padding: 10px 0; color: #475569; line-height: 1.6;">
@@ -183,13 +189,13 @@ export const sendPropertyLiveEmail = async (email: string, name: string, propert
             </div>
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `🎉 Your Property "${propertyName}" is now Live!`,
         html: htmlContent,
@@ -199,7 +205,7 @@ export const sendContactEmail = async (name: string, email: string, subject: str
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">New Contact Inquiry</p>
             </div>
             
@@ -226,14 +232,14 @@ export const sendContactEmail = async (name: string, email: string, subject: str
             </div>
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host Contact" <${process.env.SMTP_USER}>`,
-        to: "kuberhoteliers@gmail.com",
+        from: `"StayNTour Contact" <${process.env.SMTP_USER}>`,
+        to: "support@stayntour.com",
         replyTo: email,
         subject: `New Contact Inquiry: ${subject}`,
         html: htmlContent,
@@ -244,7 +250,7 @@ export const sendReceptionistCredentials = async (email: string, name: string, p
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">Receptionist Account Created</p>
             </div>
             
@@ -283,14 +289,14 @@ export const sendReceptionistCredentials = async (email: string, name: string, p
             </div>
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
-                <p>Support: kuberhoteliers@gmail.com</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
+                <p>Support: support@stayntour.com</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `🎉 Your Receptionist Account is Ready!`,
         html: htmlContent,
@@ -301,7 +307,7 @@ export const sendOTP = async (email: string, otp: string) => {
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">Verification Code</p>
             </div>
             
@@ -317,13 +323,13 @@ export const sendOTP = async (email: string, otp: string) => {
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
                 <p>If you didn't request this code, you can ignore this email.</p>
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `Your Login OTP - ${otp}`,
         html: htmlContent,
@@ -334,7 +340,7 @@ export const sendHotelOwnerCredentials = async (email: string, name: string, pas
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">Hotel Owner Account</p>
             </div>
             
@@ -380,7 +386,7 @@ export const sendHotelOwnerCredentials = async (email: string, name: string, pas
                     View and manage your assigned properties through the admin panel:
                 </p>
                 <div style="text-align: center;">
-                    <a href="https://urbanhost.in/admin/hotel-owners" 
+                    <a href="https://stayntour.com/admin/hotel-owners" 
                        style="background: #0284c7; color: white; padding: 10px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; display: inline-block; font-size: 14px;">
                         View in Admin Panel
                     </a>
@@ -394,14 +400,14 @@ export const sendHotelOwnerCredentials = async (email: string, name: string, pas
             </div>
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
-                <p>Support: kuberhoteliers@gmail.com</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
+                <p>Support: support@stayntour.com</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `🏨 Your Hotel Owner Account is Ready!`,
         html: htmlContent,
@@ -420,7 +426,7 @@ export const sendBookingConfirmation = async (
     guests: number | { adults: number; children: number }
 ) => {
     const formatDate = (date: Date) => {
-        return new Date(date).toLocaleDateString("en-IN", {
+        return new Date(date).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
             year: "numeric",
@@ -435,15 +441,15 @@ export const sendBookingConfirmation = async (
         return parts.length > 0 ? parts.join(', ') : '0 Guests';
     };
 
-    const formattedAmount = new Intl.NumberFormat("en-IN", {
+    const formattedAmount = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "INR",
+        currency: "USD",
     }).format(totalAmount);
 
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
             <div style="text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">Booking Confirmation</p>
             </div>
             
@@ -506,14 +512,14 @@ export const sendBookingConfirmation = async (
             </div>
 
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
-                <p style="margin: 5px 0;">Need help? Contact us at support@urbanhost.in</p>
-                <p style="margin: 5px 0;">© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
+                <p style="margin: 5px 0;">Need help? Contact us at support@stayntour.com</p>
+                <p style="margin: 5px 0;">© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `Booking Confirmed - ${hotelName} (#${bookingId.slice(-6).toUpperCase()})`,
         html: htmlContent,
@@ -531,22 +537,22 @@ export const sendBookingCancellation = async (
     roomType: string
 ) => {
     const formatDate = (date: Date) => {
-        return new Date(date).toLocaleDateString("en-IN", {
+        return new Date(date).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
             year: "numeric",
         });
     };
 
-    const formattedAmount = new Intl.NumberFormat("en-IN", {
+    const formattedAmount = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "INR",
+        currency: "USD",
     }).format(totalAmount);
 
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
             <div style="text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">Booking Cancellation</p>
             </div>
             
@@ -596,14 +602,14 @@ export const sendBookingCancellation = async (
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
                 <p style="margin: 5px 0;">If you didn't request this cancellation, please contact us immediately.</p>
-                <p style="margin: 5px 0;">Support: support@urbanhost.in</p>
-                <p style="margin: 5px 0;">© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
+                <p style="margin: 5px 0;">Support: support@stayntour.com</p>
+                <p style="margin: 5px 0;">© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `Booking Cancelled - ${hotelName} (#${bookingId.slice(-6).toUpperCase()})`,
         html: htmlContent,
@@ -615,7 +621,7 @@ export const sendPasswordResetOTP = async (email: string, otp: string) => {
     const htmlContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">Urban Host</h1>
+                <h1 style="color: #1E3A8A; margin: 0; font-size: 28px;">StayNTour</h1>
                 <p style="color: #64748b; margin: 5px 0; font-weight: 500;">Password Reset Request</p>
             </div>
             
@@ -631,13 +637,13 @@ export const sendPasswordResetOTP = async (email: string, otp: string) => {
             
             <div style="text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
                 <p>If you didn't request a password reset, please ignore this email or contact support if you're concerned.</p>
-                <p>© ${new Date().getFullYear()} Urban Host. All rights reserved.</p>
+                <p>© ${new Date().getFullYear()} StayNTour. All rights reserved.</p>
             </div>
         </div>
     `;
 
     return transporter.sendMail({
-        from: `"Urban Host Support" <${process.env.SMTP_USER}>`,
+        from: `"StayNTour Support" <${process.env.SMTP_USER}>`,
         to: email,
         subject: `Password Reset OTP - ${otp}`,
         html: htmlContent,

@@ -13,16 +13,17 @@ jobs:
       - name: Deploy using ssh
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: 72.62.243.77
+          host: 50.184.90.90
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          command_timeout: 3m
+          command_timeout: 5m
           script: |
-            cd ~/urban-host/urbanhost
+            cd /var/www/stayntour || cd ~/stayntour
             git fetch origin
             git reset --hard origin/main
             npm install
+            npm test
             npm run build
-            pm2 restart urbanhost --update-env || pm2 start "npm run start" --name "urbanhost"
+            pm2 restart stayntour --update-env || pm2 start "npm run start" --name "stayntour"
             pm2 save

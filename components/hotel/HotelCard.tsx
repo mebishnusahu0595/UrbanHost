@@ -23,7 +23,7 @@ export function HotelCard({
     location,
     rating,
     pricePerNight,
-    currency = "₹",
+    currency = "$",
     image,
     featured,
     labels = [],
@@ -59,15 +59,15 @@ export function HotelCard({
                         </div>
                     )}
 
-                    {/* Urban Host Property Badge */}
-                    {labels && labels.includes("Urban Host Property") && (
+                    {/* StayNTour Property Badge */}
+                    {labels && labels.includes("StayNTour Property") && (
                         <div className={`absolute top-3 ${featured ? 'left-24' : 'left-3'} bg-gradient-to-r from-orange-500 to-pink-500 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full z-10 shadow-sm`}>
-                            Urban Host Property
+                            StayNTour Property
                         </div>
                     )}
 
-                    {/* Other Labels (Show if not Urban Host) */}
-                    {labels && labels.length > 0 && !labels.includes("Urban Host Property") && !featured && (
+                    {/* Other Labels (Show if not StayNTour) */}
+                    {labels && labels.length > 0 && !labels.includes("StayNTour Property") && !featured && (
                         <div className="absolute top-3 left-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-xs font-medium px-3 py-1 rounded-full z-10">
                             {labels[0]}
                         </div>

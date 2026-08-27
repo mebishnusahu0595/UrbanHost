@@ -182,34 +182,16 @@ export const hotelsApi = {
 
 export const destinationsApi = {
     getPopular: () => Promise.resolve<Destination[]>([
-        {
-            id: "1",
-            name: "Mumbai",
-            country: "India",
-            image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f",
-            propertyCount: 250
-        },
-        {
-            id: "2",
-            name: "Delhi",
-            country: "India",
-            image: "https://images.unsplash.com/photo-1587474260584-136574528ed5",
-            propertyCount: 180
-        },
-        {
-            id: "3",
-            name: "Bangalore",
-            country: "India",
-            image: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2",
-            propertyCount: 150
-        },
-        {
-            id: "4",
-            name: "Goa",
-            country: "India",
-            image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2",
-            propertyCount: 120
-        }
+        { id: "1", name: "New York", country: "United States", image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9", propertyCount: 1450 },
+        { id: "2", name: "Miami", country: "United States", image: "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a", propertyCount: 890 },
+        { id: "3", name: "Los Angeles", country: "United States", image: "https://images.unsplash.com/photo-1580655653885-65763b2597d0", propertyCount: 1120 },
+        { id: "4", name: "Las Vegas", country: "United States", image: "https://images.unsplash.com/photo-1605833559746-6d2673002017", propertyCount: 760 },
+        { id: "5", name: "San Francisco", country: "United States", image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29", propertyCount: 640 },
+        { id: "6", name: "Chicago", country: "United States", image: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f", propertyCount: 820 },
+        { id: "7", name: "Orlando", country: "United States", image: "https://images.unsplash.com/photo-1575089776834-8be34696ffb9", propertyCount: 980 },
+        { id: "8", name: "Honolulu", country: "United States", image: "https://images.unsplash.com/photo-1542259009477-d625272157b7", propertyCount: 530 },
+        { id: "9", name: "Seattle", country: "United States", image: "https://images.unsplash.com/photo-1502175353174-a7a70e73b362", propertyCount: 590 },
+        { id: "10", name: "Austin", country: "United States", image: "https://images.unsplash.com/photo-1531218150217-54595bc2b934", propertyCount: 710 }
     ]),
 };
 

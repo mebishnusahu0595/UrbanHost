@@ -98,7 +98,7 @@ export default function HotelDetailPage() {
             if (typeof navigator !== 'undefined' && navigator.share) {
                 await navigator.share({
                     title: hotel?.name,
-                    text: `Check out ${hotel?.name} on Urban Host`,
+                    text: `Check out ${hotel?.name} on StayNTour`,
                     url: window.location.href,
                 });
             } else {
@@ -404,7 +404,7 @@ export default function HotelDetailPage() {
                     </div>
                     {hotel.highlights?.bookAtZero && (
                         <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold">₹</div>
+                            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold">$</div>
                             <div>
                                 <p className="text-base font-bold text-blue-600">Book@0 is available</p>
                                 <p className="text-sm text-gray-500">Pay nothing at the time of booking</p>
@@ -551,7 +551,7 @@ export default function HotelDetailPage() {
                                                     <div>
                                                         <div className="flex flex-col">
                                                             <div className="flex items-center gap-1">
-                                                                <span className="text-xl font-black text-gray-900">₹{room.price}</span>
+                                                                <span className="text-xl font-black text-gray-900">${room.price}</span>
                                                                 <span className="text-gray-400 font-medium">/</span>
                                                             </div>
                                                             <span className="text-[10px] text-gray-500 font-bold uppercase -mt-1">night</span>
@@ -607,7 +607,7 @@ export default function HotelDetailPage() {
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <button className="flex items-center gap-2 group">
-                                                <span className="text-3xl font-black text-gray-900">₹{displayPrice}</span>
+                                                <span className="text-3xl font-black text-gray-900">${displayPrice}</span>
                                                 <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
                                             </button>
                                         </PopoverTrigger>
@@ -616,19 +616,19 @@ export default function HotelDetailPage() {
                                             <div className="space-y-3 text-sm">
                                                 <div className="flex justify-between">
                                                     <span className="text-gray-600">Base Price</span>
-                                                    <span className="font-bold text-gray-900">₹{displayPrice}</span>
+                                                    <span className="font-bold text-gray-900">${displayPrice}</span>
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="text-gray-600">Taxes & GST (12%)</span>
-                                                    <span className="font-bold text-gray-900">₹{Math.round(displayPrice * 0.12)}</span>
+                                                    <span className="font-bold text-gray-900">${Math.round(displayPrice * 0.12)}</span>
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <span className="text-gray-600">Service Fee</span>
-                                                    <span className="font-bold text-gray-900">₹50</span>
+                                                    <span className="font-bold text-gray-900">$50</span>
                                                 </div>
                                                 <div className="flex justify-between pt-3 border-t border-gray-100">
                                                     <span className="font-black text-gray-900">Total</span>
-                                                    <span className="font-black text-green-600">₹{displayPrice + Math.round(displayPrice * 0.12) + 50}</span>
+                                                    <span className="font-black text-green-600">${displayPrice + Math.round(displayPrice * 0.12) + 50}</span>
                                                 </div>
                                             </div>
                                         </PopoverContent>
@@ -880,7 +880,7 @@ export default function HotelDetailPage() {
                                                     </div>
                                                     <div className="flex-1">
                                                         <h4 className="font-bold text-gray-900 text-sm">{getRoomName(room)}</h4>
-                                                        <p className="text-xs text-gray-500">₹{room.price} / night</p>
+                                                        <p className="text-xs text-gray-500">${room.price} / night</p>
                                                     </div>
                                                 </div>
                                             ))}
@@ -920,7 +920,7 @@ export default function HotelDetailPage() {
                                                         </div>
                                                         <h3 className="font-bold text-gray-900 text-sm leading-tight h-10">{getRoomName(room)}</h3>
                                                         <div className="text-[10px] space-y-3">
-                                                            <div className="flex justify-between items-center"><span className="text-gray-400 font-bold uppercase">Price</span><span className="text-gray-900 font-black text-lg">₹{room.price}</span></div>
+                                                            <div className="flex justify-between items-center"><span className="text-gray-400 font-bold uppercase">Price</span><span className="text-gray-900 font-black text-lg">${room.price}</span></div>
                                                             <div className="space-y-2 mt-2">
                                                                 {Array.from(new Set([...(room.amenities || []), ...(room.features || [])])).slice(0, 5).map((f: string, i: number) => (
                                                                     <div key={i} className="flex items-center gap-1.5 text-gray-700 font-bold">
@@ -955,8 +955,8 @@ export default function HotelDetailPage() {
                     <div className="flex gap-4 items-center">
                         <div className="flex-shrink-0">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-black text-gray-900">₹{displayPrice}</span>
-                                <span className="text-xs text-gray-400 line-through">₹{Math.round(displayPrice * 1.3)}</span>
+                                <span className="text-2xl font-black text-gray-900">${displayPrice}</span>
+                                <span className="text-xs text-gray-400 line-through">${Math.round(displayPrice * 1.3)}</span>
                             </div>
                             <p className="text-[10px] text-gray-400 font-bold">Incl. taxes & fees per night</p>
                         </div>

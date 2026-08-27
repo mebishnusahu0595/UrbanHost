@@ -112,8 +112,8 @@ export default function SuccessPage() {
         <div className="mt-6 pt-6 border-t border-gray-200 text-center">
           <p className="text-sm text-gray-500">
             Need help? Contact us at{" "}
-            <a href="mailto:kuberhoteliers@gmail.com" className="text-blue-600 hover:underline font-medium">
-              kuberhoteliers@gmail.com
+            <a href="mailto:info@stayntour.com" className="text-blue-600 hover:underline font-medium">
+              info@stayntour.com
             </a>
           </p>
         </div>

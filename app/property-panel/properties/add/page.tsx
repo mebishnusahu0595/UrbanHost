@@ -73,7 +73,7 @@ export default function PropertyWizard({ isEditMode, initialData, isAdmin, prope
     };
 
     // Form State
-    const [location, setLocation] = useState("IN");
+    const [location, setLocation] = useState("US");
     const [propertyType, setPropertyType] = useState<string | null>(null);
     const [propertyName, setPropertyName] = useState("");
 
@@ -121,7 +121,7 @@ export default function PropertyWizard({ isEditMode, initialData, isAdmin, prope
         { type: "Standard Room", price: 2000, capacity: 2, available: 10, images: [] }
     ]);
 
-    // Documents State - Comprehensive as per URBANHOST Requirements
+    // Documents State - Comprehensive as per STAYNTOUR Requirements
     const [documents, setDocuments] = useState<{
         // KYC Documents
         panCard: File | string | null;
@@ -238,18 +238,16 @@ export default function PropertyWizard({ isEditMode, initialData, isAdmin, prope
     const loadPropertyData = (data: any) => {
         if (!data) return;
 
-        setLocation(data.address?.country === "India" ? "IN" : "IN");
+        setLocation(data.address?.country === "USA" || data.address?.country === "United States" ? "US" : (data.address?.country || "US"));
         setPropertyType(data.category?.toLowerCase() || data.propertyType || null);
         setPropertyName(data.name || "");
 
         setDescription(data.description || "");
 
         const addr = data.address || {};
-        if (addr.country === "India" || !addr.country) {
-            const states = State.getStatesOfCountry("IN");
-            const matchedState = states.find(s => s.name === addr.state || s.isoCode === addr.state);
-            if (matchedState) setState(matchedState.isoCode);
-        }
+        const states = State.getStatesOfCountry("US");
+        const matchedState = states.find(s => s.name === addr.state || s.isoCode === addr.state);
+        if (matchedState) setState(matchedState.isoCode);
 
         setCity(addr.city || "");
         setStreetAddress(addr.street || "");
@@ -1169,7 +1167,7 @@ export default function PropertyWizard({ isEditMode, initialData, isAdmin, prope
 
                                         {/* Signed Agreement */}
                                         <div className="p-4 bg-gray-50 rounded-lg border">
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Signed URBANHOST Agreement <span className="text-red-500">*</span></label>
+                                            <label className="block text-sm font-bold text-gray-700 mb-2">Signed STAYNTOUR Agreement <span className="text-red-500">*</span></label>
                                             <p className="text-xs text-gray-500 mb-2">PDF only</p>
                                             <div className="flex gap-2">
                                                 <input type="file" accept=".pdf" className="w-full px-3 py-2 border rounded-md text-sm"

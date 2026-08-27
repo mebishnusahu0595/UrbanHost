@@ -47,3 +47,6 @@ README.md
 SETUP.md
 QUICKSTART.md
 IMPLEMENTATION_COMPLETE.md
+*.bak
+client_secret*.json
+stayNTour.png

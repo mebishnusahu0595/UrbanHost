@@ -112,7 +112,7 @@ export default function ReportsPage() {
                 beginAtZero: true,
                 ticks: {
                     callback: function (value: any) {
-                        return '₹' + value.toLocaleString('en-IN');
+                        return '$' + value.toLocaleString('en-US');
                     }
                 }
             }
@@ -213,7 +213,7 @@ export default function ReportsPage() {
                                 <CardTitle className="text-[10px] md:text-sm font-medium">Total Revenue</CardTitle>
                             </CardHeader>
                             <CardContent className="p-3 md:p-6 pt-0">
-                                <div className="text-base md:text-2xl font-bold">₹{stats?.totalRevenue?.toLocaleString('en-IN') || 0}</div>
+                                <div className="text-base md:text-2xl font-bold">${stats?.totalRevenue?.toLocaleString('en-US') || 0}</div>
                                 <p className="text-[10px] md:text-xs text-muted-foreground mt-1">All time</p>
                             </CardContent>
                         </Card>

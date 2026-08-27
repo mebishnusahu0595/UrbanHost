@@ -5,7 +5,7 @@ import dbConnect from '@/lib/mongodb';
 import Hotel from '@/models/Hotel';
 import User from '@/models/User';
 import { sendApprovalWithCredentials, sendReApprovalEmail, sendPropertyLiveEmail } from '@/lib/mail';
-import { generateUrbanHostEmail, generateHotelPassword } from '@/lib/utils';
+import { generateStayNTourEmail, generateHotelPassword } from '@/lib/utils';
 
 
 export async function POST(
@@ -42,8 +42,8 @@ export async function POST(
         let ownerEmail = property.contactInfo?.email;
         let ownerName = populatedOwner?.name || property.name || 'Property Owner';
 
-        // Generate custom UrbanHost email and password
-        const urbanHostEmail = generateUrbanHostEmail(ownerName);
+        // Generate custom StayNTour email and password
+        const stayNTourEmail = generateStayNTourEmail(ownerName);
         const hotelPassword = generateHotelPassword(property.name);
 
         // CRITICAL: Check if user exists by EMAIL, not by property.owner reference
@@ -68,7 +68,7 @@ export async function POST(
             // Create a new user account for the property owner
             generatedPassword = hotelPassword;
             // Use contact email if available, otherwise fallback to generated
-            const emailToUse = ownerEmail || urbanHostEmail;
+            const emailToUse = ownerEmail || stayNTourEmail;
 
             user = new User({
                 name: ownerName,
@@ -111,7 +111,7 @@ export async function POST(
             }
 
             // Use their existing email and name
-            ownerEmail = user.email || urbanHostEmail;
+            ownerEmail = user.email || stayNTourEmail;
             ownerName = user.name;
         }
 

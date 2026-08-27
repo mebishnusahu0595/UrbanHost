@@ -15,14 +15,11 @@ export default async function AdminLayout({
     }
 
     return (
-        <div className="h-screen overflow-hidden bg-gray-50 flex">
+        <div className="min-h-screen bg-gray-50 flex w-full">
             <Sidebar />
             {/* Main content - pt-16 for mobile header, md:ml-64 for desktop sidebar */}
-            <main className="flex-1 flex flex-col pt-16 md:pt-0 md:ml-64 h-full overflow-hidden relative">
-                {/* Scrollable content area */}
-                <div className="flex-1 overflow-y-auto w-full">
-                    {children}
-                </div>
+            <main className="flex-1 min-w-0 pt-16 md:pt-0 md:ml-64 min-h-screen w-full relative">
+                {children}
             </main>
         </div>
     );

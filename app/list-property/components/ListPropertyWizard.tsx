@@ -53,6 +53,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { GoogleMapsImportModal } from "@/components/ui/GoogleMapsImport";
+import { getMainSiteUrl } from "@/lib/utils";
 
 
 type Step = "location" | "method" | "existing-details" | "type" | "name" | "address" | "map-pin" | "contact" | "overview" | "photos" | "contract" | "post-submission";
@@ -64,7 +65,7 @@ export default function ListPropertyWizard() {
     const [step, setStep] = useState<Step>("location");
 
     // Form State
-    const [location, setLocation] = useState("IN");
+    const [location, setLocation] = useState("US");
     const [propertyType, setPropertyType] = useState<string | null>(null);
     const [propertyName, setPropertyName] = useState("");
 
@@ -111,7 +112,7 @@ export default function ListPropertyWizard() {
 
     // Contact State
     const [phoneType, setPhoneType] = useState("Mobile");
-    const [phoneCode, setPhoneCode] = useState("91");
+    const [phoneCode, setPhoneCode] = useState("1");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [emailBusiness, setEmailBusiness] = useState("");
     const [emailReservation, setEmailReservation] = useState("");
@@ -138,7 +139,7 @@ export default function ListPropertyWizard() {
     // Contract State
     const [contractSignatoryEmail, setContractSignatoryEmail] = useState("");
     const [contractSignatoryName, setContractSignatoryName] = useState("");
-    const [contractSignatoryPhoneCode, setContractSignatoryPhoneCode] = useState("91");
+    const [contractSignatoryPhoneCode, setContractSignatoryPhoneCode] = useState("1");
     const [contractSignatoryPhone, setContractSignatoryPhone] = useState("");
     const [contractingParty, setContractingParty] = useState("");
     const [isContractAgreed, setIsContractAgreed] = useState(false);
@@ -340,9 +341,8 @@ export default function ListPropertyWizard() {
         <div className="min-h-screen bg-gray-50 text-[#0f294d] pb-24">
             {/* Header - Matched to Navbar Style */}
             <header className="h-[72px] border-b flex items-center px-4 md:px-8 justify-between sticky top-0 bg-white z-20 shadow-sm">
-                <Link href="/" className="flex items-center -ml-2">
-                    <Image src="/list_property.png" alt="Urban Host Icon" width={50} height={50} className="h-9 w-auto" priority quality={100} unoptimized />
-                    <div className="ml-2 font-bold text-xl text-blue-900">UrbanHost</div>
+                <Link href={getMainSiteUrl("/")} className="flex items-center -ml-2">
+                    <Image src="/logo_name.png" alt="StayNTour" width={160} height={45} className="h-10 w-auto object-contain" priority quality={100} unoptimized />
                 </Link>
                 <div className="flex items-center gap-6 text-sm font-medium text-gray-600">
                     <button className="hidden md:block hover:text-blue-600">Need help?</button>
@@ -389,7 +389,7 @@ export default function ListPropertyWizard() {
 
                             {step === "method" && (
                                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-3xl mx-auto">
-                                    <div className="text-center mb-12"><h1 className="text-2xl md:text-3xl font-bold mb-4">Welcome to UrbanHost! How would you like to list your property?</h1></div>
+                                    <div className="text-center mb-12"><h1 className="text-2xl md:text-3xl font-bold mb-4">Welcome to StayNTour! How would you like to list your property?</h1></div>
 
                                     <div className="space-y-4 max-w-xl mx-auto">
                                         <button
@@ -726,7 +726,7 @@ export default function ListPropertyWizard() {
                                             </div>
                                             <div className="border-t pt-6">
                                                 <BooleanToggle label="Is your property under a management company?" value={isManagementCompany} onChange={setIsManagementCompany} />
-                                                {isManagementCompany && (<div className="mt-4"><label className="block text-sm font-bold text-gray-700 mb-2">Which one?</label><Select value={managementCompany} onValueChange={setManagementCompany}><SelectTrigger className="h-12 bg-white border-gray-300"> <SelectValue placeholder="Select a management company" /> </SelectTrigger><SelectContent> <SelectItem value="urban_host_mgmt">UrbanHost Mgmt</SelectItem> <SelectItem value="host_services">Host Services</SelectItem> </SelectContent></Select></div>)}
+                                                {isManagementCompany && (<div className="mt-4"><label className="block text-sm font-bold text-gray-700 mb-2">Which one?</label><Select value={managementCompany} onValueChange={setManagementCompany}><SelectTrigger className="h-12 bg-white border-gray-300"> <SelectValue placeholder="Select a management company" /> </SelectTrigger><SelectContent> <SelectItem value="urban_host_mgmt">StayNTour Mgmt</SelectItem> <SelectItem value="host_services">Host Services</SelectItem> </SelectContent></Select></div>)}
                                             </div>
                                             <div className="border-t pt-6">
                                                 <BooleanToggle label="Does your property use a channel manager?" value={isChannelManager} onChange={setIsChannelManager} />
@@ -849,7 +849,7 @@ export default function ListPropertyWizard() {
                                         </div>
                                         <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer" onClick={() => setIsContractAgreed(!isContractAgreed)}>
                                             <div className={`w-5 h-5 rounded border flex items-center justify-center mt-0.5 transition-colors ${isContractAgreed ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-400'}`}>{isContractAgreed && <Check className="w-3.5 h-3.5 text-white" />}</div>
-                                            <p className="text-xs text-gray-600">I guarantee that this property is a legally operated accommodation with all necessary registration and licensing documents. I confirm that I am able to provide these registration and licensing documents for verification when requested by UrbanHost group.</p>
+                                            <p className="text-xs text-gray-600">I guarantee that this property is a legally operated accommodation with all necessary registration and licensing documents. I confirm that I am able to provide these registration and licensing documents for verification when requested by StayNTour group.</p>
                                         </div>
                                     </div>
                                     <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t flex justify-between items-center z-50 md:sticky md:bottom-0 mt-8 rounded-b-xl">
@@ -936,11 +936,11 @@ export default function ListPropertyWizard() {
             {/* Success/Agreement Modal */}
             <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
                 <DialogContent className="max-w-2xl text-center p-12">
-                    <DialogHeader className="mb-6"><DialogTitle className="text-3xl font-black text-blue-600 mb-2">UrbanHost</DialogTitle></DialogHeader>
+                    <DialogHeader className="mb-6"><DialogTitle className="text-3xl font-black text-blue-600 mb-2">StayNTour</DialogTitle></DialogHeader>
                     <div className="space-y-4">
                         <h2 className="text-xl font-bold text-gray-900">You're almost done - just a couple last things to consider</h2>
-                        <p className="text-sm text-gray-600 leading-relaxed max-w-lg mx-auto">You have successfully completed your application to cooperate with UrbanHost and we are delighted to have you on board. Make sure to keep the special terms below in mind.</p>
-                        <div className="py-8"><button className="text-blue-600 hover:underline font-bold text-sm">UrbanHost Group General Distribution Agreement</button></div>
+                        <p className="text-sm text-gray-600 leading-relaxed max-w-lg mx-auto">You have successfully completed your application to cooperate with StayNTour and we are delighted to have you on board. Make sure to keep the special terms below in mind.</p>
+                        <div className="py-8"><button className="text-blue-600 hover:underline font-bold text-sm">StayNTour Group General Distribution Agreement</button></div>
                         <div className="text-left bg-gray-50 p-4 rounded-lg text-xs text-gray-500 mb-8">By clicking the button below, I certify I have read and agree to all linked documents herein. Additionally, I certify I have read and agree to the <span className="text-blue-600">Electronic Record and Signature Disclosure.</span></div>
                         <Button onClick={handleFinalAgree} className="w-full h-12 bg-blue-600 hover:bg-blue-700 font-bold text-white rounded-lg">Agree</Button>
                         <div className="flex justify-center items-center gap-1 text-[10px] text-gray-400 mt-4">Powered by <span className="font-bold text-gray-600">docusign</span></div>

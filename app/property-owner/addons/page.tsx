@@ -313,7 +313,7 @@ export default function PropertyOwnerAddonsPage() {
                         </TableCell>
                         <TableCell>
                           <Badge variant="secondary" className="bg-green-100 text-green-800">
-                            ₹{addon.price}
+                            ${addon.price}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-sm text-gray-600">
@@ -384,7 +384,7 @@ export default function PropertyOwnerAddonsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="price">Price (₹) <span className="text-red-500">*</span></Label>
+              <Label htmlFor="price">Price ($) <span className="text-red-500">*</span></Label>
               <div className="relative">
                 <FiDollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <Input

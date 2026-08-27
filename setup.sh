@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# UrbanHost Setup Script
+# StayNTour Setup Script
 
-echo "🏨 UrbanHost Setup"
+echo "🏨 StayNTour Setup"
 echo "=================="
 echo ""
 
@@ -55,7 +55,7 @@ if [ ! -f .env.local ]; then
     
     cat > .env.local << EOF
 # MongoDB
-MONGODB_URI=mongodb://localhost:27017/urbanhost
+MONGODB_URI=mongodb://localhost:27017/stayntour
 
 # NextAuth
 NEXTAUTH_URL=http://localhost:3000

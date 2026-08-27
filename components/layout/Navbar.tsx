@@ -53,12 +53,23 @@ export function Navbar() {
         };
     }, [isMobileMenuOpen]);
 
+    const [mainOrigin, setMainOrigin] = useState("");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const host = window.location.hostname.toLowerCase();
+            if (host.includes("stayntour.com") && (host.startsWith("partner.") || host.startsWith("admin.") || host.startsWith("superadmin.") || host.startsWith("listproperty."))) {
+                setMainOrigin("https://stayntour.com");
+            }
+        }
+    }, []);
+
     const navLinks = [
-        { href: "/", label: "Stays" },
+        { href: mainOrigin ? `${mainOrigin}/` : "/", label: "Stays" },
         { href: "/partner", label: "List Your Property" },
-        { href: "/about", label: "About Us" },
-        { href: "/privacy", label: "Our Policies" },
-        { href: "/contact", label: "Contact" },
+        { href: mainOrigin ? `${mainOrigin}/about` : "/about", label: "About Us" },
+        { href: mainOrigin ? `${mainOrigin}/privacy` : "/privacy", label: "Our Policies" },
+        { href: mainOrigin ? `${mainOrigin}/contact` : "/contact", label: "Contact" },
     ];
 
     return (
@@ -66,23 +77,13 @@ export function Navbar() {
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-18">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center -ml-2">
-                        <Image
-                            src="/list_property.png"
-                            alt="Urban Host Icon"
-                            width={50}
-                            height={50}
-                            className="h-9 w-auto"
-                            priority
-                            quality={100}
-                            unoptimized
-                        />
+                    <Link href={mainOrigin ? `${mainOrigin}/` : "/"} className="flex items-center -ml-3">
                         <Image
                             src="/logo_name.png"
-                            alt="Urban Host"
-                            width={400}
-                            height={120}
-                            className="h-24 w-auto -ml-3"
+                            alt="StayNTour"
+                            width={170}
+                            height={48}
+                            className="h-10 md:h-11 w-auto object-contain"
                             priority
                             quality={100}
                             unoptimized
@@ -93,7 +94,7 @@ export function Navbar() {
                     <div className="hidden md:flex items-center gap-8">
                         {navLinks.map((link) => (
                             <Link
-                                key={link.href}
+                                key={link.label}
                                 href={link.href}
                                 className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
                             >

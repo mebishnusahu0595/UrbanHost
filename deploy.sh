@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Urban Hosts - Server Deployment Script
-# For use on root@72.62.243.77
+# StayNTour - Server Deployment Script
+# For use on root@50.184.90.90
 
-echo "🚀 Starting Urban Hosts deployment..."
+echo "🚀 Starting StayNTour deployment..."
 
 # Update system
 echo "📦 Updating system packages..."
@@ -34,7 +34,7 @@ if ! command -v pm2 &> /dev/null; then
 fi
 
 # Clone or pull repository
-PROJECT_DIR="/var/www/urbanhost"
+PROJECT_DIR="/var/www/stayntour"
 if [ -d "$PROJECT_DIR" ]; then
     echo "🔄 Updating existing project..."
     cd $PROJECT_DIR
@@ -43,8 +43,8 @@ else
     echo "📥 Cloning repository..."
     mkdir -p /var/www
     cd /var/www
-    git clone https://github.com/Deepakscripts/UrbanHost.git urbanhost
-    cd urbanhost
+    git clone https://github.com/Deepakscripts/StayNTour.git stayntour
+    cd stayntour
 fi
 
 # Install dependencies
@@ -55,8 +55,8 @@ npm install
 if [ ! -f ".env" ]; then
     echo "📝 Creating .env file..."
     cat > .env << EOL
-MONGODB_URI=mongodb://localhost:27017/urbanhost
-NEXTAUTH_URL=https://urbanhost.in
+MONGODB_URI=mongodb://localhost:27017/stayntour
+NEXTAUTH_URL=https://stayntour.com
 NEXTAUTH_SECRET=$(openssl rand -base64 32)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
@@ -73,15 +73,15 @@ npm run seed
 
 # Configure Nginx
 echo "⚙️  Configuring Nginx..."
-cp nginx.conf /etc/nginx/sites-available/urbanhost
-ln -sf /etc/nginx/sites-available/urbanhost /etc/nginx/sites-enabled/urbanhost
+cp nginx.conf /etc/nginx/sites-available/stayntour
+ln -sf /etc/nginx/sites-available/stayntour /etc/nginx/sites-enabled/stayntour
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl restart nginx
 
 # Start with PM2
 echo "🚀 Starting application with PM2..."
-pm2 delete urbanhost 2>/dev/null || true
-pm2 start npm --name "urbanhost" -- start
+pm2 delete stayntour 2>/dev/null || true
+pm2 start npm --name "stayntour" -- start
 pm2 save
 pm2 startup
 
@@ -90,24 +90,26 @@ echo "⏳ Waiting for app to start..."
 sleep 5
 
 # Check if app is running
-if pm2 list | grep -q "urbanhost.*online"; then
+if pm2 list | grep -q "stayntour.*online"; then
     echo "✅ App is running!"
 else
-    echo "❌ App failed to start. Check logs: pm2 logs urbanhost"
+    echo "❌ App failed to start. Check logs: pm2 logs stayntour"
 fi
 
 echo "✅ Deployment complete!"
 echo ""
 echo "📊 Admin Credentials:"
-echo "   Email: admin@urbanhost.com"
-echo "   Password: UrbanHosts123!"
+echo "   Email: admin@stayntour.com"
+echo "   Password: StayNTours123!"
 echo ""
-echo "🌐 Application running at: http://72.62.243.77"
-echo "📱 Admin Dashboard: http://72.62.243.77/admin/dashboard"
+echo "🌐 Application running at: https://stayntour.com"
+echo "📱 Admin Dashboard: https://admin.stayntour.com"
+echo "🏨 Partner Portal: https://partner.stayntour.com"
+echo "🖥️ Server IP: http://50.184.90.90"
 echo ""
 echo "💡 Useful commands:"
-echo "   pm2 logs urbanhost       - View logs"
-echo "   pm2 restart urbanhost    - Restart app"
-echo "   pm2 stop urbanhost       - Stop app"
+echo "   pm2 logs stayntour       - View logs"
+echo "   pm2 restart stayntour    - Restart app"
+echo "   pm2 stop stayntour       - Stop app"
 echo "   systemctl status nginx   - Check nginx status"
 echo "   systemctl restart nginx  - Restart nginx"

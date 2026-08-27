@@ -77,7 +77,7 @@ export default function ReceptionistLayout({
                                         <span className="font-medium">{hotelName}</span>
                                     </div>
                                 ) : (
-                                    <p className="text-xs text-gray-500">Urban Host</p>
+                                    <p className="text-xs text-gray-500">StayNTour</p>
                                 )}
                             </div>
                         </div>

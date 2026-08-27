@@ -149,9 +149,9 @@ export default function HotelRevenuePage() {
     };
 
     const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-IN', {
+        return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'INR',
+            currency: 'USD',
             maximumFractionDigits: 0,
         }).format(amount);
     };
@@ -269,7 +269,7 @@ export default function HotelRevenuePage() {
                             <div>
                                 <p className="text-xs md:text-sm font-medium text-green-700">Total Revenue</p>
                                 <p className="text-lg md:text-2xl font-bold text-green-800">
-                                    {stats ? formatCurrency(stats.totalRevenue) : '₹0'}
+                                    {stats ? formatCurrency(stats.totalRevenue) : '$0'}
                                 </p>
                             </div>
                             <div className="h-10 w-10 rounded-full bg-green-500/20 flex items-center justify-center">
@@ -301,7 +301,7 @@ export default function HotelRevenuePage() {
                             <div>
                                 <p className="text-xs md:text-sm font-medium text-orange-700">Avg per Hotel</p>
                                 <p className="text-lg md:text-2xl font-bold text-orange-800">
-                                    {stats ? formatCurrency(stats.averageRevenue) : '₹0'}
+                                    {stats ? formatCurrency(stats.averageRevenue) : '$0'}
                                 </p>
                             </div>
                             <div className="h-10 w-10 rounded-full bg-orange-500/20 flex items-center justify-center">

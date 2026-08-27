@@ -45,19 +45,17 @@ export default function PropertyOwnerLayoutClient({
         <div className="h-screen overflow-hidden bg-gray-50 flex flex-col">
             {/* Mobile Header */}
             <div className="md:hidden h-16 bg-white border-b z-40 flex items-center justify-between px-4 flex-shrink-0">
-                <div className="flex items-center gap-3">
+                <Link href="/" className="flex items-center">
                     <Image
-                        src="/list_property.png"
-                        alt="UrbanHost"
-                        width={40}
+                        src="/logo_name.png"
+                        alt="StayNTour"
+                        width={140}
                         height={40}
-                        className="h-10 w-10 object-contain"
+                        className="h-8 w-auto object-contain"
+                        quality={100}
+                        unoptimized
                     />
-                    <div className="flex flex-col">
-                        <span className="text-sm font-bold text-[#1E3A8A] leading-tight">Urban Host</span>
-                        <span className="text-[8px] font-semibold uppercase tracking-wider text-gray-500">Partner Portal</span>
-                    </div>
-                </div>
+                </Link>
                 <button
                     onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     className="p-2 -mr-2 text-gray-600 hover:bg-gray-100 rounded-lg"
@@ -81,16 +79,17 @@ export default function PropertyOwnerLayoutClient({
                     )}
 
                     {/* Desktop Logo */}
-                    <div className="hidden md:flex mb-8 flex-col items-center">
+                    <div className="hidden md:flex mb-6 flex-col items-center">
                         <Image
-                            src="/list_property.png"
-                            alt="UrbanHost"
-                            width={100}
-                            height={100}
-                            className="h-20 w-20 mb-3 object-contain"
+                            src="/logo_name.png"
+                            alt="StayNTour"
+                            width={160}
+                            height={46}
+                            className="h-10 w-auto mb-2 object-contain"
+                            quality={100}
+                            unoptimized
                         />
-                        <h1 className="text-lg font-bold text-[#1E3A8A] tracking-tight">Urban Host</h1>
-                        <p className="text-[10px] font-semibold uppercase tracking-widest text-[#F87171] mt-1">Partner Portal</p>
+                        <p className="text-[10px] font-semibold uppercase tracking-widest text-[#F87171]">Partner Portal</p>
                     </div>
 
                     <nav className="space-y-1">

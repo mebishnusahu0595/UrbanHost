@@ -142,7 +142,7 @@ export function RevenueChart({ monthlyData = [], weeklyData = [], dailyData = []
                 cornerRadius: 8,
                 displayColors: false,
                 callbacks: {
-                    label: (context: any) => `₹${context.parsed.y.toLocaleString()}`,
+                    label: (context: any) => `$${context.parsed.y.toLocaleString()}`,
                 },
             },
         },
@@ -174,7 +174,7 @@ export function RevenueChart({ monthlyData = [], weeklyData = [], dailyData = []
                     font: {
                         size: 11,
                     },
-                    callback: (value: any) => value >= 1000 ? `₹${value / 1000}k` : `₹${value}`,
+                    callback: (value: any) => value >= 1000 ? `$${value / 1000}k` : `$${value}`,
                     padding: 8,
                 },
                 border: {

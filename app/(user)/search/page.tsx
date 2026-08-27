@@ -66,7 +66,7 @@ function SearchPageContent() {
     }, [locationParam]);
 
     // Filter State
-    const [sortBy, setSortBy] = useState("Urban Host Properties");
+    const [sortBy, setSortBy] = useState("StayNTour Properties");
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
     const [selectedStars, setSelectedStars] = useState<number[]>([]);
     const [activeFilters, setActiveFilters] = useState<string[]>([]);
@@ -124,7 +124,7 @@ function SearchPageContent() {
             if (sortBy === "Price: Low to High") return aPrice - bPrice;
             if (sortBy === "Price: High to Low") return bPrice - aPrice;
             if (sortBy === "Rating") return (b.rating || 0) - (a.rating || 0);
-            return 0; // Default to API order (Urban Host prioritized)
+            return 0; // Default to API order (StayNTour prioritized)
         });
 
     return (
@@ -241,9 +241,9 @@ function SearchPageContent() {
 
                                                     {/* Badges */}
                                                     <div className="absolute top-2 left-2 z-10 flex flex-col gap-1 items-start">
-                                                        {hotel.labels?.includes("Urban Host Property") && (
+                                                        {hotel.labels?.includes("StayNTour Property") && (
                                                             <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full shadow-sm">
-                                                                Urban Host
+                                                                StayNTour
                                                             </div>
                                                         )}
                                                         {hotel.labels?.includes("Best Seller") && (
@@ -290,7 +290,7 @@ function SearchPageContent() {
                                                     <div className="flex items-end justify-between pt-2 border-t border-gray-50">
                                                         <div className="flex flex-col">
                                                             <div className="flex items-baseline gap-1">
-                                                                <span className="text-xl font-bold text-gray-900">₹{minPrice.toLocaleString()}</span>
+                                                                <span className="text-xl font-bold text-gray-900">${minPrice.toLocaleString()}</span>
                                                                 <span className="text-[10px] text-gray-500 font-bold">/ night</span>
                                                             </div>
                                                             <p className="text-[9px] text-green-600 font-bold uppercase mt-0.5">+ taxes & fees</p>
@@ -340,8 +340,8 @@ function SearchPageContent() {
                             <h3 className="text-base font-bold text-gray-900 mb-6">Price Range</h3>
                             <div className="px-2">
                                 <div className="flex justify-between text-sm font-bold text-gray-700 mb-4">
-                                    <span>₹{priceRange[0]}</span>
-                                    <span>₹{priceRange[1]}</span>
+                                    <span>${priceRange[0]}</span>
+                                    <span>${priceRange[1]}</span>
                                 </div>
                                 {/* Simple native range for demo or custom slider */}
                                 <input
@@ -401,7 +401,7 @@ function SearchPageContent() {
                         <DialogTitle className="text-xl font-bold">Sort By</DialogTitle>
                     </DialogHeader>
                     <div className="p-2">
-                        {["Urban Host Properties", "Price: Low to High", "Price: High to Low", "Rating"].map((option) => (
+                        {["StayNTour Properties", "Price: Low to High", "Price: High to Low", "Rating"].map((option) => (
                             <button
                                 key={option}
                                 onClick={() => {
