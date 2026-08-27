@@ -32,6 +32,7 @@ import {
     Waves,
     Wind,
     Coffee,
+    ChevronLeft,
     ChevronRight,
     ChevronDown,
     ArrowLeftRight,
@@ -49,6 +50,92 @@ import { useHotel } from "@/lib/hooks/useHotels";
 import { Reviews } from "@/components/hotel/Reviews";
 import { LoginModal } from "@/components/auth/LoginModal";
 
+function RoomImageSlider({
+    images,
+    roomName,
+    onOpenGallery
+}: {
+    images: string[];
+    roomName: string;
+    onOpenGallery: (index: number) => void;
+}) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const validImages = images && images.length > 0 ? images : ["/bnb-images/1822-bougainvillea-house.jpg"];
+
+    const handlePrev = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev - 1 + validImages.length) % validImages.length);
+    };
+
+    const handleNext = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev + 1) % validImages.length);
+    };
+
+    return (
+        <div
+            className="md:w-1/3 relative h-52 md:h-auto md:min-h-[220px] bg-gray-100 group overflow-hidden select-none"
+            onClick={(e) => {
+                e.stopPropagation();
+                onOpenGallery(currentIndex);
+            }}
+        >
+            <Image
+                src={validImages[currentIndex]}
+                alt={`${roomName} - Photo ${currentIndex + 1}`}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+
+            {/* Dark overlay hint on hover */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors pointer-events-none" />
+
+            {/* Left & Right Arrow Buttons */}
+            {validImages.length > 1 && (
+                <>
+                    <button
+                        onClick={handlePrev}
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-md cursor-pointer z-10 hover:scale-110"
+                        aria-label="Previous room photo"
+                    >
+                        <ChevronLeft className="w-5 h-5 text-white" />
+                    </button>
+                    <button
+                        onClick={handleNext}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-md cursor-pointer z-10 hover:scale-110"
+                        aria-label="Next room photo"
+                    >
+                        <ChevronRight className="w-5 h-5 text-white" />
+                    </button>
+
+                    {/* Pagination Dots */}
+                    <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full pointer-events-auto">
+                        {validImages.map((_, idx) => (
+                            <button
+                                key={idx}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCurrentIndex(idx);
+                                }}
+                                className={`rounded-full transition-all cursor-pointer ${
+                                    idx === currentIndex
+                                        ? "w-2.5 h-2.5 bg-white shadow"
+                                        : "w-1.5 h-1.5 bg-white/50 hover:bg-white/90"
+                                }`}
+                                aria-label={`Go to slide ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
+
+            {/* View Photos Badge */}
+            <div className="absolute top-2.5 right-2.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg text-[11px] font-bold text-white shadow-sm pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity">
+                {currentIndex + 1}/{validImages.length}
+            </div>
+        </div>
+    );
+}
 
 /**
  * HotelDetailPage Component
@@ -350,25 +437,30 @@ export default function HotelDetailPage() {
                                 alt={`Gallery ${activeImageIndex}`}
                                 className="w-full h-full object-contain"
                                 onError={(e) => {
-                                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format";
+                                    (e.target as HTMLImageElement).src = "/bnb-images/1822-bougainvillea-house.jpg";
                                 }}
                             />
 
-                            {/* Navigation */}
+                            {/* Left Navigation Arrow */}
                             <button
                                 onClick={() => setActiveImageIndex((activeImageIndex - 1 + galleryImages.length) % galleryImages.length)}
-                                className="absolute left-4 p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md transition-colors"
+                                className="absolute left-4 p-3 bg-black/60 hover:bg-black/90 rounded-full text-white backdrop-blur-md transition-all z-20 shadow-xl hover:scale-110 flex items-center justify-center cursor-pointer"
+                                aria-label="Previous Image"
                             >
-                                <ArrowLeftRight className="w-6 h-6 text-white rotate-180" />
-                            </button>
-                            <button
-                                onClick={() => setActiveImageIndex((activeImageIndex + 1) % galleryImages.length)}
-                                className="absolute right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md transition-colors"
-                            >
-                                <ArrowLeftRight className="w-6 h-6 text-white" />
+                                <ChevronLeft className="w-6 h-6 text-white" />
                             </button>
 
-                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold">
+                            {/* Right Navigation Arrow */}
+                            <button
+                                onClick={() => setActiveImageIndex((activeImageIndex + 1) % galleryImages.length)}
+                                className="absolute right-4 p-3 bg-black/60 hover:bg-black/90 rounded-full text-white backdrop-blur-md transition-all z-20 shadow-xl hover:scale-110 flex items-center justify-center cursor-pointer"
+                                aria-label="Next Image"
+                            >
+                                <ChevronRight className="w-6 h-6 text-white" />
+                            </button>
+
+                            {/* Image Counter Pill */}
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold shadow-lg border border-white/10">
                                 {activeImageIndex + 1} / {galleryImages.length}
                             </div>
                         </div>
@@ -524,20 +616,11 @@ export default function HotelDetailPage() {
                                     >
                                         <h3 className="text-lg font-bold text-gray-900 bg-gray-50 px-4 py-3 border-b border-gray-100">{roomName}</h3>
                                         <div className="flex flex-col md:flex-row">
-                                            <div
-                                                className="md:w-1/3 relative h-48 md:h-auto md:min-h-[220px] bg-gray-100 cursor-pointer group"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    openGallery(room.images && room.images.length > 0 ? room.images : [roomImage], 0);
-                                                }}
-                                            >
-                                                <Image src={roomImage} alt={roomName} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                                                    <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
-                                                        View Photos
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <RoomImageSlider
+                                                images={room.images && room.images.length > 0 ? room.images : [roomImage]}
+                                                roomName={roomName}
+                                                onOpenGallery={(idx) => openGallery(room.images && room.images.length > 0 ? room.images : [roomImage], idx)}
+                                            />
                                             <div className="flex-1 p-4">
                                                 <div className="mb-4 space-y-3">
                                                     <div className="flex flex-wrap gap-4 text-xs font-medium text-gray-600">
