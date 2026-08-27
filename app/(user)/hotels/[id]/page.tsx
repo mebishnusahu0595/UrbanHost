@@ -478,27 +478,35 @@ export default function HotelDetailPage() {
                         </section>
 
                         {/* Location Map */}
-                        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-[400px] relative z-0 flex items-center justify-center bg-gray-50">
-                            {hotel.embedUrl ? (
-                                <iframe
-                                    src={hotel.embedUrl}
-                                    width="100%"
-                                    height="100%"
-                                    style={{ border: 0 }}
-                                    allowFullScreen
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                />
-                            ) : (
-                                <div className="text-center text-gray-400 font-medium">
-                                    <MapPin className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                                    <p>Maps not available</p>
-                                </div>
-                            )}
-                            <div className="absolute top-4 left-4 z-[400] bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-xs font-bold shadow-sm border pointer-events-none">
-                                {hotel.address?.city || "Location"}
-                            </div>
-                        </section>
+                        {(() => {
+                            const lat = hotel.location?.coordinates?.[1] || (hotel as any).latitude;
+                            const lng = hotel.location?.coordinates?.[0] || (hotel as any).longitude;
+                            const locationStr = [hotel.address?.street, hotel.address?.city, hotel.address?.state, "USA"].filter(Boolean).join(", ");
+                            const mapQuery = lat && lng
+                                ? `${lat},${lng}`
+                                : encodeURIComponent(`${hotel.name}, ${locationStr}`);
+                            const mapEmbedUrl = hotel.embedUrl || `https://maps.google.com/maps?q=${mapQuery}&hl=en&z=14&output=embed`;
+
+                            return (
+                                <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-[400px] relative z-0 flex items-center justify-center bg-gray-50">
+                                    <iframe
+                                        src={mapEmbedUrl}
+                                        width="100%"
+                                        height="100%"
+                                        style={{ border: 0 }}
+                                        allowFullScreen
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        title={`${hotel.name} Location Map`}
+                                        className="w-full h-full"
+                                    />
+                                    <div className="absolute top-4 left-4 z-[400] bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-xl text-xs font-extrabold text-gray-900 shadow-md border border-gray-200 pointer-events-none flex items-center gap-1.5">
+                                        <MapPin className="w-3.5 h-3.5 text-rose-500" />
+                                        <span>{[hotel.address?.city, hotel.address?.state].filter(Boolean).join(", ") || "USA"}</span>
+                                    </div>
+                                </section>
+                            );
+                        })()}
 
                         {/* Room Selection */}
                         <section id="rooms" className="space-y-4">
