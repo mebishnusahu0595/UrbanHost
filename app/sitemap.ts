@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import mongoose from 'mongoose';
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'https://stayntour.com';
+const BASE_URL = 'https://stayntour.com';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/stayntour';
 
 export const dynamic = 'force-dynamic';
