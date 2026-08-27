@@ -17,10 +17,18 @@ import {
     FiShare2,
 } from "react-icons/fi";
 import { FaYoutube, FaGlobe } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
 export default function ContactPage() {
+    useEffect(() => {
+        document.title = "Contact Us & 24/7 Support | StayNTour";
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'Get in touch with StayNTour 24/7 guest concierge and host support team for booking assistance, inquiries, or partner onboarding.');
+        }
+    }, []);
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",

@@ -1,9 +1,18 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Shield, Lock, Eye, FileText, ChevronRight, Scale, Gavel, AlertCircle, CheckCircle2, Clock, Globe, CreditCard } from "lucide-react";
 
 export default function OurPoliciesPage() {
+    useEffect(() => {
+        document.title = "Our Policies, Terms & Privacy | StayNTour";
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'Read StayNTour policies, privacy terms, guest cancellation and refund procedures, and cookie security guidelines.');
+        }
+    }, []);
+
     const sections = [
         { id: "privacy", title: "Privacy Policy", icon: Shield },
         { id: "terms", title: "Terms & Conditions", icon: Gavel },

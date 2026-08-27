@@ -8,9 +8,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Testimonials } from "./components/Testimonials";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function PartnerPage() {
+    useEffect(() => {
+        document.title = "Partner With Us | List Your Bed & Breakfast on StayNTour";
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'List your Bed & Breakfast, Boutique Inn, or Mountain Lodge on StayNTour. Reach verified travelers, maximize occupancy, and retain direct guest relationships.');
+        }
+    }, []);
+
     const benefits = [
         {
             icon: <Users className="w-12 h-12 text-[#1E3A8A]" />,

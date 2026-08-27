@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,13 +20,21 @@ import {
 import { motion } from "framer-motion";
 
 export default function CareersPage() {
+    useEffect(() => {
+        document.title = "Careers & Opportunities | Join the StayNTour Team";
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'Explore open positions and career opportunities at StayNTour. Help shape the future of authentic travel and bed & breakfast hospitality.');
+        }
+    }, []);
+
     return (
         <div className="min-h-screen bg-white">
             {/* HERO SECTION */}
             <section className="relative h-[60vh] flex items-center justify-center overflow-hidden mx-4 my-4 rounded-[2rem]">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop"
+                        src="/hero.png"
                         alt="Join Our Journey"
                         fill
                         className="object-cover brightness-[0.4]"

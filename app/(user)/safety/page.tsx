@@ -1,11 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, ShieldCheck, CreditCard, Headphones, CheckCircle2, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function SafetyPage() {
+    useEffect(() => {
+        document.title = "Guest Safety & Cancellation Guarantees | StayNTour";
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'Explore StayNTour guest safety commitments, property verification standards, and flexible cancellation policies.');
+        }
+    }, []);
+
     return (
         <div className="min-h-screen bg-gray-50/30">
             {/* Header / Search */}

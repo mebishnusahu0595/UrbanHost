@@ -1,10 +1,19 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Building2, Users, CreditCard, BarChart3, HeadphonesIcon, Shield } from "lucide-react";
 
 export default function BusinessPage() {
+    useEffect(() => {
+        document.title = "StayNTour for Business | Corporate Stays & Retreats";
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'Streamline executive travel, boutique corporate retreats, and employee accommodations with StayNTour for Business.');
+        }
+    }, []);
+
     return (
         <div className="min-h-screen bg-gray-50 pt-8 pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

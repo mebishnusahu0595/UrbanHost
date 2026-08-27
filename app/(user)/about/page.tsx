@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,14 @@ export default function AboutPage() {
     const coreValuesRef = useRef<HTMLDivElement>(null);
     const teamRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        document.title = "About Us | StayNTour - America's Authentic BnB Network";
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', 'Learn about StayNTour, our mission to connect travelers with handpicked, authentic Bed & Breakfasts, Historic Manors, and Mountain Lodges across America.');
+        }
+    }, []);
+
     const scroll = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
         if (ref.current) {
             const scrollAmount = direction === "left" ? -300 : 300;
@@ -31,8 +39,8 @@ export default function AboutPage() {
             <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=1920&auto=format&fit=crop"
-                        alt="Urban Skyline"
+                        src="/hero.png"
+                        alt="StayNTour Authentic Stays"
                         fill
                         className="object-cover brightness-[0.4]"
                         priority

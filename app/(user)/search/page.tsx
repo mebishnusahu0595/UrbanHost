@@ -63,6 +63,11 @@ function SearchPageContent() {
 
     useEffect(() => {
         setEditLocation(locationParam);
+        if (locationParam) {
+            document.title = `Bed & Breakfasts in ${locationParam} | StayNTour`;
+        } else {
+            document.title = `Explore Authentic Bed & Breakfasts in the USA | StayNTour`;
+        }
     }, [locationParam]);
 
     // Filter State
