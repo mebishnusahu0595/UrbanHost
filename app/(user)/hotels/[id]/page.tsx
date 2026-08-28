@@ -46,7 +46,7 @@ import {
     Loader2,
     Building,
 } from "lucide-react";
-import { useHotel } from "@/lib/hooks/useHotels";
+import { useHotel, useHotelAvailability } from "@/lib/hooks/useHotels";
 import { Reviews } from "@/components/hotel/Reviews";
 import { LoginModal } from "@/components/auth/LoginModal";
 
@@ -179,6 +179,27 @@ export default function HotelDetailPage() {
     });
     const [adults, setAdults] = useState(parseInt(searchParams.get("adults") || "2"));
     const [rooms, setRooms] = useState(parseInt(searchParams.get("rooms") || "1"));
+
+    // Real-Time Date Availability Checking
+    const fromStr = dateRange.from ? format(dateRange.from, "yyyy-MM-dd") : undefined;
+    const toStr = dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : undefined;
+    const { data: availabilityData } = useHotelAvailability(hotelId, fromStr, toStr);
+
+    const getRoomAvailability = (room: any) => {
+        if (!availabilityData?.rooms) {
+            return { availableCount: typeof room.available === "number" ? room.available : 2, isAvailable: (room.available || 2) > 0 };
+        }
+        const found = availabilityData.rooms.find(
+            (ar: any) =>
+                ar._id === room._id ||
+                (ar.type && room.type && ar.type.toLowerCase() === room.type.toLowerCase()) ||
+                (ar.name && room.name && ar.name.toLowerCase() === room.name.toLowerCase())
+        );
+        if (found) {
+            return { availableCount: found.availableCount, isAvailable: found.isAvailable };
+        }
+        return { availableCount: typeof room.available === "number" ? room.available : 2, isAvailable: (room.available || 2) > 0 };
+    };
 
     const handleApply = () => {
         const params = new URLSearchParams(searchParams.toString());
@@ -691,10 +712,42 @@ export default function HotelDetailPage() {
                                 return (
                                     <div
                                         key={room._id}
-                                        onClick={() => setSelectedRoomId(room._id || null)}
-                                        className={`bg-white rounded-2xl border-2 overflow-hidden cursor-pointer transition-all ${selectedRoomId === room._id ? "border-blue-500 ring-4 ring-blue-50" : "border-gray-100 hover:border-gray-300 shadow-sm"}`}
+                                        onClick={() => {
+                                            const avail = getRoomAvailability(room);
+                                            if (avail.isAvailable && avail.availableCount > 0) {
+                                                setSelectedRoomId(room._id || null);
+                                            }
+                                        }}
+                                        className={`bg-white rounded-2xl border-2 overflow-hidden transition-all ${
+                                            (() => {
+                                                const avail = getRoomAvailability(room);
+                                                const isSoldOut = !avail.isAvailable || avail.availableCount <= 0;
+                                                if (isSoldOut) return "border-gray-200 opacity-75 cursor-not-allowed bg-gray-50/50";
+                                                return selectedRoomId === room._id
+                                                    ? "border-[#1E3A8A] ring-4 ring-blue-50 cursor-pointer"
+                                                    : "border-gray-100 hover:border-gray-300 shadow-sm cursor-pointer";
+                                            })()
+                                        }`}
                                     >
-                                        <h3 className="text-lg font-bold text-gray-900 bg-gray-50 px-4 py-3 border-b border-gray-100">{roomName}</h3>
+                                        <div className="bg-gray-50 px-4 py-3 border-b border-gray-100 flex items-center justify-between flex-wrap gap-2">
+                                            <h3 className="text-lg font-bold text-gray-900">{roomName}</h3>
+                                            {(() => {
+                                                const avail = getRoomAvailability(room);
+                                                const isSoldOut = !avail.isAvailable || avail.availableCount <= 0;
+                                                if (isSoldOut) {
+                                                    return (
+                                                        <span className="px-3 py-1 bg-red-100 border border-red-200 text-red-700 text-xs font-bold rounded-full flex items-center gap-1.5 shadow-sm">
+                                                            <X className="w-3.5 h-3.5" /> Sold Out for Selected Dates
+                                                        </span>
+                                                    );
+                                                }
+                                                return (
+                                                    <span className="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-full flex items-center gap-1.5 shadow-sm">
+                                                        <Check className="w-3.5 h-3.5 text-emerald-600" /> {avail.availableCount} {avail.availableCount === 1 ? 'Suite' : 'Suites'} Available
+                                                    </span>
+                                                );
+                                            })()}
+                                        </div>
                                         <div className="flex flex-col md:flex-row">
                                             <RoomImageSlider
                                                 images={room.images && room.images.length > 0 ? room.images : [roomImage]}
@@ -704,8 +757,10 @@ export default function HotelDetailPage() {
                                             <div className="flex-1 p-4">
                                                 <div className="mb-4 space-y-3">
                                                     <div className="flex flex-wrap gap-4 text-xs font-medium text-gray-600">
-                                                        <div className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-400" /> Max Capacity: {room.capacity}</div>
-                                                        <div className="flex items-center gap-2"><Building className="w-4 h-4 text-gray-400" /> {room.available} Rooms Available</div>
+                                                        <div className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-400" /> Max Capacity: {room.capacity} Guests</div>
+                                                        <div className="flex items-center gap-2">
+                                                            <Building className="w-4 h-4 text-gray-400" /> Total Capacity: {room.available || 2} Rooms
+                                                        </div>
                                                     </div>
 
                                                     {/* Amenities - Horizontal scroll on mobile, wrap on desktop */}
@@ -747,20 +802,34 @@ export default function HotelDetailPage() {
                                                         >
                                                             <ArrowLeftRight className="w-4 h-4" /> Compare
                                                         </Button>
-                                                        <Button
-                                                            size="sm"
-                                                            className={`h-10 text-xs font-bold px-6 rounded-xl transition-all ${selectedRoomId === room._id ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-100"}`}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                if (selectedRoomId === room._id) {
-                                                                    setSelectedRoomId(null);
-                                                                } else {
-                                                                    setSelectedRoomId(room._id || null);
-                                                                }
-                                                            }}
-                                                        >
-                                                            {selectedRoomId === room._id ? "Selected" : "Select"}
-                                                        </Button>
+                                                        {(() => {
+                                                            const avail = getRoomAvailability(room);
+                                                            const isSoldOut = !avail.isAvailable || avail.availableCount <= 0;
+                                                            return (
+                                                                <Button
+                                                                    size="sm"
+                                                                    disabled={isSoldOut}
+                                                                    className={`h-10 text-xs font-bold px-6 rounded-xl transition-all ${
+                                                                        isSoldOut
+                                                                            ? "bg-gray-200 text-gray-400 cursor-not-allowed border-none shadow-none"
+                                                                            : selectedRoomId === room._id
+                                                                                ? "bg-green-600 hover:bg-green-700 text-white"
+                                                                                : "bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-100"
+                                                                    }`}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        if (isSoldOut) return;
+                                                                        if (selectedRoomId === room._id) {
+                                                                            setSelectedRoomId(null);
+                                                                        } else {
+                                                                            setSelectedRoomId(room._id || null);
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    {isSoldOut ? "Sold Out" : selectedRoomId === room._id ? "Selected" : "Select"}
+                                                                </Button>
+                                                            );
+                                                        })()}
                                                     </div>
                                                 </div>
                                             </div>
@@ -790,7 +859,7 @@ export default function HotelDetailPage() {
                                                     <span className="font-bold text-gray-900">${displayPrice}</span>
                                                 </div>
                                                 <div className="flex justify-between">
-                                                    <span className="text-gray-600">Taxes & GST (12%)</span>
+                                                    <span className="text-gray-600">US Lodging & Occupancy Tax (12%)</span>
                                                     <span className="font-bold text-gray-900">${Math.round(displayPrice * 0.12)}</span>
                                                 </div>
                                                 <div className="flex justify-between">

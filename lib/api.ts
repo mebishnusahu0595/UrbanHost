@@ -146,6 +146,8 @@ export interface Booking {
         children: number;
     };
     totalPrice: number;
+    discount?: number;
+    couponCode?: string;
     status: "pending" | "confirmed" | "cancelled" | "completed";
     paymentStatus: "pending" | "paid" | "refunded";
     paymentMethod?: string;

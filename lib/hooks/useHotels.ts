@@ -50,3 +50,19 @@ export function useHotelReviews(id: string) {
         enabled: !!id,
     });
 }
+
+export function useHotelAvailability(id: string, from?: string, to?: string) {
+    return useQuery({
+        queryKey: ["hotels", id, "availability", from, to],
+        queryFn: async () => {
+            if (!id) return null;
+            const url = from && to
+                ? `/api/hotels/${id}/availability?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`
+                : `/api/hotels/${id}/availability`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Failed to check availability");
+            return res.json();
+        },
+        enabled: !!id,
+    });
+}

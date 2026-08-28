@@ -286,9 +286,34 @@ export default function ConfirmationPage() {
                     </div>
                 </div>
 
-                <div className="hidden print:block mb-8 text-center border-b pb-4">
-                    <h1 className="text-3xl font-bold text-gray-900">INVOICE</h1>
-                    <p>Booking ID: #{(booking._id || bookingId).slice(-6).toUpperCase()}</p>
+                {/* Printable Invoice Header */}
+                <div className="hidden print:block mb-8 pb-6 border-b-2 border-gray-900">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h1 className="text-3xl font-black text-[#1E3A8A] tracking-tight">StayNTour</h1>
+                            <p className="text-xs text-gray-600 font-medium mt-0.5">StayNTour Hospitality Services • USA</p>
+                            <p className="text-xs text-gray-500">support@stayntour.com • https://stayntour.com</p>
+                        </div>
+                        <div className="text-right">
+                            <h2 className="text-2xl font-black text-gray-900 tracking-wider">TAX INVOICE</h2>
+                            <p className="text-xs text-gray-600 font-bold mt-1">Invoice #: INV-{(booking._id || bookingId).slice(-8).toUpperCase()}</p>
+                            <p className="text-xs text-gray-500">Date: {format(new Date(booking.createdAt || Date.now()), "MMMM d, yyyy")}</p>
+                            <p className="text-xs text-emerald-700 font-bold uppercase mt-1">Status: {booking.status.toUpperCase()}</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-gray-200 text-xs">
+                        <div>
+                            <p className="font-bold text-gray-900 uppercase mb-0.5">Billed To (Guest):</p>
+                            <p className="font-semibold text-gray-800">{booking.guestInfo?.name || "Guest"}</p>
+                            <p className="text-gray-600">{booking.guestInfo?.email}</p>
+                            <p className="text-gray-600">{booking.guestInfo?.phone}</p>
+                        </div>
+                        <div className="text-right">
+                            <p className="font-bold text-gray-900 uppercase mb-0.5">Property Reserved:</p>
+                            <p className="font-semibold text-gray-800">{hotel?.name}</p>
+                            <p className="text-gray-600">{hotel?.address?.street}, {hotel?.address?.city}, {hotel?.address?.state}</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -425,20 +450,26 @@ export default function ConfirmationPage() {
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 print:shadow-none print:border">
                             <h3 className="text-lg font-bold text-gray-900 mb-6">Payment Summary</h3>
 
-                            <div className="space-y-4 mb-6">
+                            <div className="space-y-3 mb-6">
                                 <div className="flex justify-between text-gray-600 text-sm">
-                                    <span>{booking.roomType} x {nights} Nights</span>
-                                    <span className="font-medium text-gray-900">${basePrice.toFixed(2)}</span>
+                                    <span>Room Subtotal ({nights} {nights === 1 ? 'Night' : 'Nights'} × {booking.numberOfRooms || 1} {parseInt(String(booking.numberOfRooms || 1)) === 1 ? 'Room' : 'Rooms'})</span>
+                                    <span className="font-semibold text-gray-900">${basePrice.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-600 text-sm">
-                                    <span>Total Price (Incl. Taxes & Fees)</span>
-                                    <span className="font-medium text-gray-900">${booking.totalPrice.toFixed(2)}</span>
+                                    <span>US Lodging & Occupancy Tax (12%)</span>
+                                    <span className="font-semibold text-gray-900">${(basePrice * 0.12).toFixed(2)}</span>
                                 </div>
+                                {booking.discount && booking.discount > 0 && (
+                                    <div className="flex justify-between text-sm text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                                        <span>Promo Discount {booking.couponCode ? `(${booking.couponCode})` : ''}</span>
+                                        <span className="font-bold">-${booking.discount.toFixed(2)}</span>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex justify-between items-center pt-4 border-t border-gray-100 mb-6">
-                                <span className="font-bold text-gray-900">Total Paid</span>
-                                <span className="text-2xl font-bold text-[#F87171]">${booking.totalPrice.toLocaleString("en-US")}</span>
+                                <span className="font-bold text-gray-900">Total {booking.paymentMethod?.toLowerCase().includes('property') ? 'Due at Check-in' : 'Paid'}</span>
+                                <span className="text-2xl font-bold text-[#1E3A8A]">${booking.totalPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                             </div>
 
                             <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3 print:bg-transparent print:border">
