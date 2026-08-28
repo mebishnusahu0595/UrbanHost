@@ -200,7 +200,11 @@ export function SearchBar() {
 
                 {/* Autocomplete Suggestions Dropdown (Locations & Properties) */}
                 {showSuggestions && (hasSuggestions || isLoadingSuggestions || inputValue.length > 0) && (
-                    <div className="absolute top-full left-0 mt-3 w-full md:w-[460px] bg-white rounded-2xl shadow-2xl border border-gray-200 py-3 z-[9999] max-h-[380px] overflow-y-auto animate-in fade-in slide-in-from-top-2">
+                    <div 
+                        data-lenis-prevent="true"
+                        onWheel={(e) => e.stopPropagation()}
+                        className="absolute top-full left-0 mt-3 w-full md:w-[460px] bg-white rounded-2xl shadow-2xl border border-gray-200 py-3 z-[9999] max-h-[380px] overflow-y-auto overscroll-contain animate-in fade-in slide-in-from-top-2"
+                    >
                         {isLoadingSuggestions && !hasSuggestions ? (
                             <div className="px-6 py-4 text-sm text-gray-500 flex items-center gap-2">
                                 <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> Searching destinations & properties...

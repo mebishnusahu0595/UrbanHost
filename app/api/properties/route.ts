@@ -21,19 +21,36 @@ export async function GET(req: Request) {
         // Filter by status if provided (public site usually asks for 'approved')
         if (status) query.status = status;
 
-        // Filter by City/Location
+        // Filter by City / Location / Property Name
         if (city) {
-            const cityParts = city.split(',').map(p => p.trim()).filter(p => p.length > 0);
+            const trimmed = city.trim();
+            const escaped = trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const cityParts = trimmed.split(',').map(p => p.trim()).filter(p => p.length > 0);
+
+            const cityOr: any[] = [
+                { name: { $regex: escaped, $options: 'i' } },
+                { title: { $regex: escaped, $options: 'i' } },
+                { description: { $regex: escaped, $options: 'i' } },
+                { "address.city": { $regex: escaped, $options: 'i' } },
+                { "address.state": { $regex: escaped, $options: 'i' } },
+                { "address.street": { $regex: escaped, $options: 'i' } },
+                { "rooms.type": { $regex: escaped, $options: 'i' } }
+            ];
+
             if (cityParts.length > 0) {
-                const cityOr: any[] = [
-                    { "address.city": { $regex: cityParts[0], $options: 'i' } },
-                    { "address.state": { $regex: cityParts[0], $options: 'i' } }
-                ];
+                const partEscaped = cityParts[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                cityOr.push(
+                    { "address.city": { $regex: partEscaped, $options: 'i' } },
+                    { "address.state": { $regex: partEscaped, $options: 'i' } },
+                    { name: { $regex: partEscaped, $options: 'i' } }
+                );
                 if (cityParts.length > 1) {
-                    cityOr.push({ "address.state": { $regex: cityParts[1], $options: 'i' } });
+                    const stateEscaped = cityParts[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    cityOr.push({ "address.state": { $regex: stateEscaped, $options: 'i' } });
                 }
-                andFilters.push({ $or: cityOr });
             }
+
+            andFilters.push({ $or: cityOr });
         }
 
         // Optional keyword search in name or description
