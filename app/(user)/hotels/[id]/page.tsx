@@ -310,9 +310,11 @@ export default function HotelDetailPage() {
     const getRoomImage = (room: any) => room.images?.[0] || room.image || defaultRoomImage;
     const getRoomName = (room: any) => room.name || room.type || "Standard Room";
 
-    // Capacity Validation
+    // Capacity & Real-Time Availability Validation
     const isCapacityExceeded = selectedRoom ? (rooms * (selectedRoom.capacity || 2) < adults) : false;
-    const canContinue = selectedRoomId && !isCapacityExceeded;
+    const selectedRoomAvail = selectedRoom ? getRoomAvailability(selectedRoom) : null;
+    const isSelectedRoomSoldOut = selectedRoomAvail ? (!selectedRoomAvail.isAvailable || selectedRoomAvail.availableCount < rooms) : false;
+    const canContinue = selectedRoomId && !isCapacityExceeded && !isSelectedRoomSoldOut;
 
     // Structured Data JSON-LD for Google Rich Results
     const hotelJsonLd = {
@@ -915,6 +917,16 @@ export default function HotelDetailPage() {
                                     <div className="bg-red-50 border border-red-100 rounded-xl p-3 text-[11px] text-red-600 font-bold flex items-start gap-2 animate-pulse">
                                         <X className="w-4 h-4 flex-shrink-0" />
                                         <span>Capacity exceeded! For {adults} guests, you need more than {rooms} {rooms > 1 ? 'rooms' : 'room'} of this type.</span>
+                                    </div>
+                                )}
+                                {isSelectedRoomSoldOut && (
+                                    <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-[11px] text-red-600 font-bold flex items-start gap-2 animate-pulse">
+                                        <X className="w-4 h-4 flex-shrink-0" />
+                                        <span>
+                                            {selectedRoomAvail?.availableCount === 0 
+                                                ? "This room is completely sold out for your selected dates."
+                                                : `Only ${selectedRoomAvail?.availableCount} room(s) available for your selected dates. Please decrease room count to proceed.`}
+                                        </span>
                                     </div>
                                 )}
                                 {!selectedRoomId && (
