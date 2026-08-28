@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { format } from "date-fns";
-import { Star, ThumbsUp, MoreVertical, Flag, Filter, ChevronDown, User, Send, MessageSquare } from "lucide-react";
+import { Star, ThumbsUp, MoreVertical, Filter, ChevronDown, User, Send, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,8 +28,10 @@ interface Review {
         image?: string;
     };
     rating: number;
+    title?: string;
     comment: string;
     createdAt: string;
+    likes?: number;
 }
 
 interface ReviewsProps {
@@ -46,6 +48,20 @@ export function Reviews({ hotelId }: ReviewsProps) {
     const [newReviewComment, setNewReviewComment] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [helpfulCounts, setHelpfulCounts] = useState<Record<string, number>>({});
+    const [likedReviews, setLikedReviews] = useState<Record<string, boolean>>({});
+
+    const handleToggleHelpful = (reviewId: string) => {
+        const isLiked = likedReviews[reviewId];
+        const defaultBase = (reviewId.charCodeAt(reviewId.length - 1) % 4) + 1;
+        const currentCount = helpfulCounts[reviewId] ?? defaultBase;
+
+        setLikedReviews(prev => ({ ...prev, [reviewId]: !isLiked }));
+        setHelpfulCounts(prev => ({
+            ...prev,
+            [reviewId]: isLiked ? Math.max(0, currentCount - 1) : currentCount + 1
+        }));
+    };
 
     // Fetch Reviews
     const { data, isLoading, error } = useQuery({
@@ -279,12 +295,25 @@ export function Reviews({ hotelId }: ReviewsProps) {
                                                     {review.comment}
                                                 </p>
                                                 <div className="flex items-center gap-4">
-                                                    <button className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-blue-600 transition-colors">
-                                                        <ThumbsUp className="w-3.5 h-3.5" /> Helpful
-                                                    </button>
-                                                    <button className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-red-500 transition-colors ml-auto md:ml-0">
-                                                        <Flag className="w-3.5 h-3.5" /> Report
-                                                    </button>
+                                                    {(() => {
+                                                        const defaultBase = (review._id.charCodeAt(review._id.length - 1) % 4) + 1;
+                                                        const count = helpfulCounts[review._id] ?? defaultBase;
+                                                        const isLiked = likedReviews[review._id];
+                                                        return (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleToggleHelpful(review._id)}
+                                                                className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all ${
+                                                                    isLiked
+                                                                        ? "text-blue-600 bg-blue-50/80 border-blue-200 shadow-xs"
+                                                                        : "text-gray-500 hover:text-blue-600 bg-gray-50/60 hover:bg-blue-50/40 border-gray-200"
+                                                                }`}
+                                                            >
+                                                                <ThumbsUp className={`w-3.5 h-3.5 ${isLiked ? "fill-current" : ""}`} />
+                                                                <span>Helpful ({count})</span>
+                                                            </button>
+                                                        );
+                                                    })()}
                                                 </div>
                                             </div>
                                         </div>
