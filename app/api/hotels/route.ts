@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
         await connectToDatabase();
         const { searchParams } = new URL(req.url);
         const id = searchParams.get("id");
-        const city = searchParams.get("city");
+        const city = searchParams.get("city") || searchParams.get("location");
         const query_text = searchParams.get("query");
 
         if (id) {
@@ -21,9 +21,14 @@ export async function GET(req: NextRequest) {
         if (city) {
             const cityParts = city.split(',').map(p => p.trim()).filter(p => p.length > 0);
             if (cityParts.length > 0) {
+                const term = cityParts[0];
                 const cityOr: any[] = [
-                    { "address.city": { $regex: cityParts[0], $options: 'i' } },
-                    { "address.state": { $regex: cityParts[0], $options: 'i' } }
+                    { "address.city": { $regex: term, $options: 'i' } },
+                    { "address.state": { $regex: term, $options: 'i' } },
+                    { name: { $regex: term, $options: 'i' } },
+                    { title: { $regex: term, $options: 'i' } },
+                    { description: { $regex: term, $options: 'i' } },
+                    { "rooms.type": { $regex: term, $options: 'i' } }
                 ];
                 if (cityParts.length > 1) {
                     cityOr.push({ "address.state": { $regex: cityParts[1], $options: 'i' } });
@@ -36,6 +41,8 @@ export async function GET(req: NextRequest) {
             andFilters.push({
                 $or: [
                     { name: { $regex: query_text, $options: 'i' } },
+                    { title: { $regex: query_text, $options: 'i' } },
+                    { description: { $regex: query_text, $options: 'i' } },
                     { "address.city": { $regex: query_text, $options: 'i' } },
                     { "address.state": { $regex: query_text, $options: 'i' } }
                 ]

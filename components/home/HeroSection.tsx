@@ -8,9 +8,9 @@ import Link from "next/link";
 
 export function HeroSection() {
     return (
-        <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[620px] flex items-center justify-center pt-24 pb-20">
             {/* Background Image with Overlay */}
-            <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <Image
                     src="/hero.webp"
                     alt="StayNTour - Authentic Stays"
@@ -24,7 +24,7 @@ export function HeroSection() {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-20 text-center">
+            <div className="relative z-20 w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 text-center">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
                     Find your next stay
                     <br />
@@ -35,7 +35,7 @@ export function HeroSection() {
                 </p>
 
                 {/* Search Bar */}
-                <div className="max-w-4xl mx-auto mb-8">
+                <div className="max-w-4xl mx-auto mb-8 relative z-30">
                     <SearchBar />
                 </div>
 
@@ -56,8 +56,8 @@ export function HeroSection() {
                 </div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+            {/* Decorative Bottom Gradient */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent pointer-events-none z-10" />
         </section>
     );
 }

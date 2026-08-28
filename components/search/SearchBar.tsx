@@ -147,14 +147,9 @@ export function SearchBar() {
     };
 
     const handleSelectProperty = (property: PropertySuggestion) => {
+        setInputValue(property.name);
+        setLocation(property.name);
         setShowSuggestions(false);
-        const params = new URLSearchParams();
-        if (filters.checkIn) params.set("from", format(filters.checkIn, "yyyy-MM-dd"));
-        if (filters.checkOut) params.set("to", format(filters.checkOut, "yyyy-MM-dd"));
-        if (filters.guests > 1) params.set("adults", String(filters.guests));
-        
-        const queryString = params.toString() ? `?${params.toString()}` : "";
-        router.push(`/hotels/${property.id}${queryString}`);
     };
 
     const handleSearch = () => {
@@ -177,7 +172,7 @@ export function SearchBar() {
     const hasSuggestions = suggestions.locations.length > 0 || suggestions.properties.length > 0;
 
     return (
-        <div className="bg-white rounded-3xl md:rounded-full shadow-2xl p-4 md:p-2 flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-2 w-full border border-gray-100 relative">
+        <div className="bg-white rounded-3xl md:rounded-full shadow-2xl p-4 md:p-2 flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-2 w-full border border-gray-100 relative z-30">
             {/* Location & Hotel Search Input */}
             <div className="flex-1 flex items-center gap-3 px-4 py-3 md:py-2 border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-2 relative" ref={dropdownRef}>
                 <MapPin className="w-5 h-5 text-[#1E3A8A] flex-shrink-0" />
@@ -205,7 +200,7 @@ export function SearchBar() {
 
                 {/* Autocomplete Suggestions Dropdown (Locations & Properties) */}
                 {showSuggestions && (hasSuggestions || isLoadingSuggestions || inputValue.length > 0) && (
-                    <div className="absolute top-full left-0 right-0 md:w-[420px] mt-4 bg-white rounded-2xl shadow-2xl border border-gray-100 py-3 z-[100] max-h-[420px] overflow-y-auto animate-in fade-in slide-in-from-top-2">
+                    <div className="absolute top-full left-0 mt-3 w-full md:w-[460px] bg-white rounded-2xl shadow-2xl border border-gray-200 py-3 z-[9999] max-h-[380px] overflow-y-auto animate-in fade-in slide-in-from-top-2">
                         {isLoadingSuggestions && !hasSuggestions ? (
                             <div className="px-6 py-4 text-sm text-gray-500 flex items-center gap-2">
                                 <Loader2 className="w-4 h-4 animate-spin text-blue-600" /> Searching destinations & properties...
