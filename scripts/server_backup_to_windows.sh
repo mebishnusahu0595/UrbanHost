@@ -2,61 +2,90 @@
 set -e
 
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M")
-BACKUP_DIR="/tmp/server_backup_${TIMESTAMP}"
+BACKUP_TMP="/tmp/fast_server_backup"
 LOG_FILE="/var/log/server_backup.log"
 WINDOWS_IP="50.184.90.91"
 WINDOWS_USER="Administrator"
 WINDOWS_PASS="Moses2754"
 WINDOWS_SHARE="G$"
-REMOTE_TARGET_DIR="Linux_Server_Backups"
+TARGET_ROOT="Linux_Server_Backups"
 
 echo "=========================================================" >> "$LOG_FILE"
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting Full Server Backup..." >> "$LOG_FILE"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting Optimized Full Server Backup to Windows ($WINDOWS_IP)..." >> "$LOG_FILE"
 
-mkdir -p "$BACKUP_DIR"
+rm -rf "$BACKUP_TMP"
+mkdir -p "$BACKUP_TMP"
 
-# 1. MongoDB - Full Cluster Dump (Compressed)
+# Function to upload file to specific folder on Windows
+upload_to_windows() {
+    local LOCAL_FILE="$1"
+    local REMOTE_SUBDIR="$2"
+    local REMOTE_FILENAME="$3"
+
+    if [ -f "$LOCAL_FILE" ]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Uploading $REMOTE_FILENAME to $TARGET_ROOT\\$REMOTE_SUBDIR..." >> "$LOG_FILE"
+        smbclient "//${WINDOWS_IP}/${WINDOWS_SHARE}" -U "${WINDOWS_USER}%${WINDOWS_PASS}" << EOF >> "$LOG_FILE" 2>&1
+mkdir ${TARGET_ROOT}
+cd ${TARGET_ROOT}
+mkdir ${REMOTE_SUBDIR}
+cd ${REMOTE_SUBDIR}
+put ${LOCAL_FILE} ${REMOTE_FILENAME}
+EOF
+    fi
+}
+
+# 1. MongoDB - Full Cluster Dump (All DBs: StayNTour, Drevo, CMercial, CMS, WebAshore, etc.)
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] 1. Exporting all MongoDB databases..." >> "$LOG_FILE"
-mongodump --gzip --archive="${BACKUP_DIR}/mongodb_all_databases.gz" >> "$LOG_FILE" 2>&1
+mongodump --gzip --archive="${BACKUP_TMP}/mongodb_all_databases_${TIMESTAMP}.gz" >> "$LOG_FILE" 2>&1
+upload_to_windows "${BACKUP_TMP}/mongodb_all_databases_${TIMESTAMP}.gz" "databases" "mongodb_all_databases_${TIMESTAMP}.gz"
+upload_to_windows "${BACKUP_TMP}/mongodb_all_databases_${TIMESTAMP}.gz" "databases" "mongodb_all_databases_latest.gz"
 
-# 2. Web & App Source Codes + Uploads (Excluding node_modules & build caches)
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 2. Archiving /var/www apps (stayntour, drevo, cmercial, cms, webashore, zexton)..." >> "$LOG_FILE"
-tar --exclude='node_modules' \
-    --exclude='.next' \
-    --exclude='dist' \
-    --exclude='.cache' \
-    --exclude='.git' \
-    -czf "${BACKUP_DIR}/apps_source_code_and_uploads.tar.gz" \
-    -C /var/www . >> "$LOG_FILE" 2>&1
+# 2. Nginx & SSL Certificates
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 2. Archiving Nginx configurations & SSL certificates..." >> "$LOG_FILE"
+tar -czf "${BACKUP_TMP}/nginx_configs_${TIMESTAMP}.tar.gz" -C / etc/nginx >> "$LOG_FILE" 2>&1
+upload_to_windows "${BACKUP_TMP}/nginx_configs_${TIMESTAMP}.tar.gz" "nginx_configs" "nginx_configs_${TIMESTAMP}.tar.gz"
 
-# 3. Nginx Configurations & SSL Certificates
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 3. Archiving Nginx configs and SSL certificates..." >> "$LOG_FILE"
-tar -czf "${BACKUP_DIR}/nginx_and_ssl_certs.tar.gz" \
-    -C / etc/nginx etc/letsencrypt >> "$LOG_FILE" 2>&1
+tar -czf "${BACKUP_TMP}/ssl_certificates_${TIMESTAMP}.tar.gz" -C / etc/letsencrypt >> "$LOG_FILE" 2>&1
+upload_to_windows "${BACKUP_TMP}/ssl_certificates_${TIMESTAMP}.tar.gz" "ssl_certificates" "ssl_certificates_${TIMESTAMP}.tar.gz"
 
-# 4. PM2 Process List & Crontabs
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 4. Archiving PM2 process configuration and Crontabs..." >> "$LOG_FILE"
-sudo -u administrator pm2 save || true
-cp -f /home/administrator/.pm2/dump.pm2 "${BACKUP_DIR}/pm2_dump.json" 2>/dev/null || true
-crontab -l > "${BACKUP_DIR}/root_crontab.txt" 2>/dev/null || true
-sudo -u administrator crontab -l > "${BACKUP_DIR}/administrator_crontab.txt" 2>/dev/null || true
+# 3. PM2 Process List & Crontabs
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 3. Archiving PM2 process configurations and Crontabs..." >> "$LOG_FILE"
+sudo -u administrator pm2 save 2>/dev/null || true
+cp -f /home/administrator/.pm2/dump.pm2 "${BACKUP_TMP}/pm2_processes_${TIMESTAMP}.json" 2>/dev/null || true
+upload_to_windows "${BACKUP_TMP}/pm2_processes_${TIMESTAMP}.json" "pm2_and_crons" "pm2_processes_${TIMESTAMP}.json"
 
-# 5. Create Master Archive
-MASTER_ARCHIVE="/tmp/full_server_backup_${TIMESTAMP}.tar.gz"
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 5. Packaging into master backup archive: ${MASTER_ARCHIVE}..." >> "$LOG_FILE"
-tar -czf "$MASTER_ARCHIVE" -C /tmp "server_backup_${TIMESTAMP}" >> "$LOG_FILE" 2>&1
+crontab -l > "${BACKUP_TMP}/root_crontab_${TIMESTAMP}.txt" 2>/dev/null || true
+upload_to_windows "${BACKUP_TMP}/root_crontab_${TIMESTAMP}.txt" "pm2_and_crons" "root_crontab_${TIMESTAMP}.txt"
 
-# 6. Transfer Master Archive to Windows Server G: Drive via SMB
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 6. Transferring backup to Windows Server (${WINDOWS_IP}\\${WINDOWS_SHARE}\\${REMOTE_TARGET_DIR})..." >> "$LOG_FILE"
-smbclient "//${WINDOWS_IP}/${WINDOWS_SHARE}" -U "${WINDOWS_USER}%${WINDOWS_PASS}" << SMB_EOF >> "$LOG_FILE" 2>&1
-mkdir ${REMOTE_TARGET_DIR}
-cd ${REMOTE_TARGET_DIR}
-put ${MASTER_ARCHIVE} full_server_backup_${TIMESTAMP}.tar.gz
-ls
-SMB_EOF
+# 4. Each Web Application Source Code & Uploads (Includes all images, gifs, videos, audio, uploads)
+APPS=("stayntour" "drevo" "cmercial.com" "cms-platform" "oncorg" "webashore" "zexton")
 
-# 7. Cleanup Local Temp Files
-rm -rf "$BACKUP_DIR" "$MASTER_ARCHIVE"
+for APP in "${APPS[@]}"; do
+    if [ -d "/var/www/$APP" ]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] 4. Archiving app (code + all uploads/images/media): $APP..." >> "$LOG_FILE"
+        APP_ARCHIVE="${BACKUP_TMP}/${APP}_source_${TIMESTAMP}.tar.gz"
+        tar --exclude='node_modules' \
+            --exclude='.next' \
+            --exclude='dist' \
+            --exclude='build' \
+            --exclude='.turbo' \
+            --exclude='.cache' \
+            --exclude='.git' \
+            --exclude='apks' \
+            --exclude='scratch' \
+            --exclude='*.apk' \
+            --exclude='*.iso' \
+            -czf "$APP_ARCHIVE" \
+            -C /var/www "$APP" >> "$LOG_FILE" 2>&1
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 🎉 Full Server Backup completed and saved to Windows Server successfully!" >> "$LOG_FILE"
+        upload_to_windows "$APP_ARCHIVE" "apps" "${APP}_source_${TIMESTAMP}.tar.gz"
+        upload_to_windows "$APP_ARCHIVE" "apps" "${APP}_source_latest.tar.gz"
+        rm -f "$APP_ARCHIVE"
+    fi
+done
+
+# 5. Cleanup temp files
+rm -rf "$BACKUP_TMP"
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] 🎉 Full Production Server Backup saved directly to Windows G:\\${TARGET_ROOT} successfully!" >> "$LOG_FILE"
 echo "=========================================================" >> "$LOG_FILE"
