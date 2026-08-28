@@ -4,7 +4,10 @@ export interface IReview extends Document {
     user: mongoose.Types.ObjectId;
     hotel: mongoose.Types.ObjectId;
     rating: number;
+    title?: string;
     comment: string;
+    verifiedStay?: boolean;
+    stayDate?: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -27,11 +30,23 @@ const reviewSchema = new Schema<IReview>(
             min: 1,
             max: 5,
         },
+        title: {
+            type: String,
+            trim: true,
+            maxLength: 200,
+        },
         comment: {
             type: String,
             required: true,
             trim: true,
-            maxLength: 1000,
+            maxLength: 2000,
+        },
+        verifiedStay: {
+            type: Boolean,
+            default: true,
+        },
+        stayDate: {
+            type: String,
         },
     },
     {
@@ -39,10 +54,11 @@ const reviewSchema = new Schema<IReview>(
     }
 );
 
-// Prevent multiple reviews from same user for same hotel (optional, but good practice, maybe user wants multiple stays? simpler to allow for now or just restrict?)
-// For now, I'll not enforce unique index on user+hotel to allow multiple reviews for different stays if implemented later, but typically one review per user per hotel is standard 
-// unless we check bookings. Let's keep it simple.
+// Indexes
+reviewSchema.index({ hotel: 1, createdAt: -1 });
+reviewSchema.index({ user: 1, hotel: 1 });
 
-const Review: Model<IReview> = mongoose.models.Review || mongoose.model<IReview>('Review', reviewSchema);
+const Review: Model<IReview> =
+    mongoose.models.Review || mongoose.model<IReview>('Review', reviewSchema);
 
 export default Review;

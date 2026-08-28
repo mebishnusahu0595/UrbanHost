@@ -60,7 +60,7 @@ export function Reviews({ hotelId }: ReviewsProps) {
     const reviews: Review[] = data?.reviews || [];
     const distribution = data?.distribution || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     const totalReviews = data?.total || 0;
-    const averageRating = totalReviews > 0 ? (Object.entries(distribution).reduce((acc, [star, count]) => acc + parseInt(star) * (count as number), 0) / totalReviews).toFixed(1) : "0.0";
+    const averageRating = data?.averageRating || (totalReviews > 0 ? (Object.entries(distribution).reduce((acc, [star, count]) => acc + parseInt(star) * (count as number), 0) / totalReviews).toFixed(1) : "0.0");
 
     // Random Top 5 Reviews (client-side logic as requested "randomly show top 5")
     // Note: Implementing true "random" on every render might be jarring, so we could memoize or just shuffle once on load
